@@ -1,0 +1,20 @@
+{
+  "name": "GrandSwiss",
+  "short_name": "GrandSwiss Hotel Admin",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo1.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
