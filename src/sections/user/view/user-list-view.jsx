@@ -346,7 +346,7 @@ export default function UserListView() {
               title="High Priority"
               icon="iconoir:priority-high-solid"
               iconColor="error.main"
-              total={23}
+              total={12}
               chart={{
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [3, 5, 2, 4, 6, 2, 1],
@@ -371,7 +371,7 @@ export default function UserListView() {
             <AppWidgetSummary
               title="Completed Tasks"
               iconColor="success.main"
-              total={18}
+              total={4}
               percent={+12}
               icon="solar:check-circle-bold-duotone"
               chart={{

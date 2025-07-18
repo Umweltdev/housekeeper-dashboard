@@ -262,12 +262,12 @@ export default function InvoiceListViewEdit() {
     );
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: tableData.length },
+    { value: 'all', label: 'All Task', color: 'default', count: tableData.length },
     {
-      value: 'paid',
+      value: 'completed',
       label: 'Completed',
       color: 'success',
-      count: getInvoiceLength('paid'),
+      count: getInvoiceLength('completed'),
     },
     {
       value: 'pending',
@@ -276,16 +276,10 @@ export default function InvoiceListViewEdit() {
       count: getInvoiceLength('pending'),
     },
     {
-      value: 'cancelled',
+      value: 'high',
       label: 'High Priority',
       color: 'error',
-      count: getInvoiceLength('cancelled'),
-    },
-    {
-      value: 'refunded',
-      label: 'Total task',
-      color: 'default',
-      count: getInvoiceLength('refunded'),
+      count: tableData.filter((item) => item.priority === 'High').length,
     },
   ];
 
@@ -548,7 +542,11 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((invoice) => invoice.status === status);
+    if (status === 'high') {
+      inputData = inputData.filter((task) => task.priority === 'High');
+    } else {
+      inputData = inputData.filter((task) => task.status === status);
+    }
   }
 
   if (service.length) {
