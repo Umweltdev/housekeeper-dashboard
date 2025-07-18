@@ -1,10 +1,12 @@
 // file: src/sections/overview/AverageCheckInTimeChart.js
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { parseISO } from 'date-fns';
+
 import { Card, CardHeader } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
+
 import Chart, { useChart } from 'src/components/chart';
-import { parseISO } from 'date-fns';
 
 const CHART_HEIGHT = 400;
 

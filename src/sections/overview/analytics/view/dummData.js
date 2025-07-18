@@ -1,5 +1,6 @@
 import { grey } from '@mui/material/colors';
-import { error, info, secondary, success, warning } from 'src/theme/palette';
+
+import { info, error, success, warning, secondary } from 'src/theme/palette';
 
 export const RESERVATION_CHANNEL_DATA = {
   week: {

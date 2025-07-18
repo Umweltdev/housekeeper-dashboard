@@ -1,10 +1,13 @@
-import { Box } from '@mui/system';
 import React from 'react';
+
+import { Box } from '@mui/system';
+import { useTheme } from '@mui/material/styles';
+
+import { useGetBookings } from 'src/api/booking';
+
 import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
 import AppWidgetSummaryTotal from 'src/sections/overview/app/app-widget-summary-total';
-import { useTheme } from '@mui/material/styles';
 import AppWidgetSummaryReservation from 'src/sections/overview/app/app-widget-summary-reservation';
-import { useGetBookings } from 'src/api/booking';
 
 const AnalyticTable = () => {
   const theme = useTheme();

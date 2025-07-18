@@ -1,53 +1,44 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Calendar from '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 import interactionPlugin from '@fullcalendar/interaction';
-import Tooltip from '@mui/material/Tooltip';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 
+import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Divider } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
+import Tooltip from '@mui/material/Tooltip';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box } from '@mui/system';
-import { Divider, Grid } from '@mui/material';
-import Popover from '@mui/material/Popover';
-import { LoadingButton } from '@mui/lab';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { isAfter, isBetween } from 'src/utils/format-time';
 
+import { useGetBookings } from 'src/api/booking';
+import { useGetRoomType } from 'src/api/roomType';
 import { CALENDAR_COLOR_OPTIONS } from 'src/_mock/_calendar';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useGetBookings } from 'src/api/booking';
-import { useGetRooms } from 'src/api/room';
-import { useGetRoomType } from 'src/api/roomType';
-
-import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
-import AppWidgetSummaryReservation from 'src/sections/overview/app/app-widget-summary-reservation';
-import AppWidgetSummaryTotal from 'src/sections/overview/app/app-widget-summary-total';
-
 import { StyledCalendar } from '../styles';
+import BookingForm from '../calendar-form';
+import RoomTableView from './room-list-view';
+import AnalyticTable from './analytics-table';
 import { useEvent, useCalendar } from '../hooks';
 import CalendarToolbar from '../calendar-toolbar';
 import CalendarFilters from '../calendar-filters';
-import CalendarFiltersResult from '../calendar-filters-result';
-
 import ReservationTableView from './reservation-list-table';
-import RoomTableView from './room-list-view';
-import BookingForm from '../calendar-form';
-import AnalyticTable from './analytics-table';
+import CalendarFiltersResult from '../calendar-filters-result';
 
 const defaultFilters = {
   colors: [],

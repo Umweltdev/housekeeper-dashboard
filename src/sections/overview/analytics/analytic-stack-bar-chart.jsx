@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
-import { Box, Card, CardHeader } from '@mui/material';
+
 import { useTheme } from '@mui/system';
-import Chart, { useChart } from 'src/components/chart';
+import { Box, Card, CardHeader } from '@mui/material';
+
 import { success, warning } from 'src/theme/palette';
+
+import Chart, { useChart } from 'src/components/chart';
 
 
 

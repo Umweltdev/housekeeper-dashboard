@@ -1,35 +1,37 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo, useEffect, useCallback } from 'react';
 
 // Material UI Components
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
-import axiosInstance from 'src/utils/axios';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // Custom Components
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import axiosInstance from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
+
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
-import Iconify from 'src/components/iconify';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function UserNewEditForm({ currentUser, onClose }) {
   const router = useRouter();

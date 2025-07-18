@@ -1,9 +1,32 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback, useEffect } from 'react';
-import { useRouter } from 'src/routes/hooks';
+import { useState, useEffect, useCallback } from 'react';
+
+import {
+  Card,
+  Table,
+  Stack,
+  Button,
+  MenuItem,
+  Container,
+  TableBody,
+  TextField,
+  Typography,
+  TableContainer,
+  InputAdornment,
+} from '@mui/material';
+
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useGetBookings } from 'src/api/booking';
+
+import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   emptyRows,
@@ -12,30 +35,6 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table';
-import {
-  Card,
-  Table,
-  Stack,
-  Button,
-  Container,
-  TableBody,
-  TableContainer,
-  Typography,
-  TextField,
-  MenuItem,
-  InputAdornment,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  TableCell,
-  TableRow,
-} from '@mui/material';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
-
-import { useGetBookings } from 'src/api/booking';
 
 import ReservationTableRow from './reservation-table-row';
 
@@ -180,8 +179,7 @@ export default function ReservationTableView({ reservations }) {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row) => (
-                    <>
-                      <ReservationTableRow
+                    <ReservationTableRow
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
@@ -190,7 +188,6 @@ export default function ReservationTableView({ reservations }) {
                         onEditRow={() => handleEditRow(row._id)}
                         onDeleteRow={() => handleDeleteRow(row._id)}
                       />
-                    </>
                   ))}
 
                 <TableEmptyRows

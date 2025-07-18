@@ -1,7 +1,9 @@
-import { Card, CardContent, Typography, Box, Select, MenuItem, useTheme } from '@mui/material';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { fCurrency, fNumber } from 'src/utils/format-number';
+import PropTypes from 'prop-types';
+
+import { Box, Card, Select, MenuItem, useTheme, Typography, CardContent } from '@mui/material';
+
+import { fNumber } from 'src/utils/format-number';
 
 export default function AnalyticsVerticalChart({ title, bookingData, ...other }) {
   const [filter, setFilter] = useState('day');

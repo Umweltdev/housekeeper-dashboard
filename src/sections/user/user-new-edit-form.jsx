@@ -1,38 +1,40 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 // Material UI Components
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Dialog from '@mui/material/Dialog';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // Custom Components
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { fData } from 'src/utils/format-number';
-import { useSnackbar } from 'src/components/snackbar';
-import Label from 'src/components/label';
+
 import axiosInstance from 'src/utils/axios';
+import { fData } from 'src/utils/format-number';
+
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from 'src/components/hook-form';
-import Iconify from 'src/components/iconify';
-import makeToast from '../tour/assets/toaster';
+
 import CheckoutPage from './CheckoutPage';
+import makeToast from '../tour/assets/toaster';
 
 export default function UserNewEditForm({ currentUser }) {
   const router = useRouter();

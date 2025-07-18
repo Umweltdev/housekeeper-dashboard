@@ -1,7 +1,7 @@
 /* eslint-disable perfectionist/sort-imports */
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Divider, Grid } from '@mui/material';
+import { Divider } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
@@ -19,7 +19,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { isAfter, isBetween } from 'src/utils/format-time';
+import { isAfter } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -43,8 +43,6 @@ import { useGetInvoices } from 'src/api/invoice';
 
 import { useGetBookings } from 'src/api/booking';
 
-import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
-import AppWidgetSummaryReservation from 'src/sections/overview/app/app-widget-summary-reservation';
 import AppWidgetSummaryTotal from 'src/sections/overview/app/app-widget-summary-total';
 
 import OrderTableRow from '../order-table-row';

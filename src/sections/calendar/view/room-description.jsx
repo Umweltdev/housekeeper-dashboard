@@ -1,15 +1,15 @@
+import PropTypes from 'prop-types';
+
 import {
+  Box,
   Dialog,
+  Button,
+  CardMedia,
+  Typography,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
-  Typography,
-  CardMedia,
-  Grid,
-  Box,
 } from '@mui/material';
-import PropTypes from 'prop-types';
 
 export function RoomDescriptionModal({ open, onClose, description, images }) {
   return (

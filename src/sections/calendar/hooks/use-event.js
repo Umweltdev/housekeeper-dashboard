@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function useEvent(events, selectEventId, selectedRange, openForm) {
   const [currentEvent, setCurrentEvent] = useState(null);

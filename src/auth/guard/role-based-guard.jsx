@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
-
+import { useGetUser } from 'src/api/user';
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
-import { useGetUser } from 'src/api/user';
 
 // ----------------------------------------------------------------------
 

@@ -1,40 +1,39 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TablePagination,
-  Paper,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  CircularProgress,
-  Snackbar,
-  Alert,
-  Modal,
-  TextField,
-  Button,
-  Collapse,
-} from '@mui/material';
-import { useGetUser } from 'src/api/user';
-import { formatNairaAmountLong } from 'src/utils/format-naira-short';
-import { fDate } from 'src/utils/format-time';
-import {
-  useCancelBooking,
-  useCheckoutBooking,
-  useExtendStay,
-  useGetBookings,
-} from 'src/api/booking';
-import { useGetRoomType } from 'src/api/roomType';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+
 import { Box } from '@mui/system';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { GridExpandMoreIcon, GridMoreVertIcon } from '@mui/x-data-grid';
+import { GridMoreVertIcon, GridExpandMoreIcon } from '@mui/x-data-grid';
+import {
+  Menu,
+  Table,
+  Paper,
+  Modal,
+  Button,
+  TableRow,
+  MenuItem,
+  Collapse,
+  TableBody,
+  TableCell,
+  TableHead,
+  TextField,
+  IconButton,
+  Typography,
+  TableContainer,
+} from '@mui/material';
+
+import { fDate } from 'src/utils/format-time';
+import { formatNairaAmountLong } from 'src/utils/format-naira-short';
+
+import { useGetUser } from 'src/api/user';
 import { useGetFloors } from 'src/api/floor';
+import { useGetRoomType } from 'src/api/roomType';
+import {
+  useExtendStay,
+  useGetBookings,
+  useCancelBooking,
+  useCheckoutBooking,
+} from 'src/api/booking';
 
 function UserBookingTable({ id }) {
   const { user: currentUser } = useGetUser(id);

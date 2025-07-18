@@ -12,11 +12,11 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { fDateTime } from 'src/utils/format-time';
+import { formatNairaAmountLong } from 'src/utils/format-naira-short';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { formatNairaAmount, formatNairaAmountLong } from 'src/utils/format-naira-short';
 
 // ----------------------------------------------------------------------
 

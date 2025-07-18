@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable perfectionist/sort-imports */
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -9,11 +9,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import dayjs from 'dayjs';
 
 import { SeoIllustration } from 'src/assets/illustrations';
-import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { endpoints, fetcher } from 'src/utils/axios';
+import { fetcher, endpoints } from 'src/utils/axios';
 import { useGetRooms } from 'src/api/room';
 import { useGetUsers } from 'src/api/user';
 import { useGetBookings } from 'src/api/booking';
@@ -23,7 +22,6 @@ import { useGetRoomType } from 'src/api/roomType';
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
 import AppNewInvoice from '../app-new-invoice';
-import AppTopRelated from '../app-top-related';
 import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';

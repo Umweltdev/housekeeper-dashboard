@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
-import { Card, CardHeader, Box } from '@mui/material';
+
+import { Box, Card, CardHeader } from '@mui/material';
+
 import Chart, { useChart } from 'src/components/chart';
 
 export default function InquiryTypeChart({ title, subheader, chart }) {

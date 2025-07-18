@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router';
+
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
-
-import { useNavigate } from 'react-router';
-
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+
 import { useBoolean } from 'src/hooks/use-boolean';
+
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
 import { RoomDescriptionModal } from './room-description';
 
 export default function RoomTableRow({ row, selected, onEditRow, onDeleteRow }) {

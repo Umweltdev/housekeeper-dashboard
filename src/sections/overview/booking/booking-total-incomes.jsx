@@ -4,13 +4,13 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { alpha, useTheme } from '@mui/material/styles';
 
-import { fPercent, fCurrency, fShortenNumber } from 'src/utils/format-number';
+import { fPercent, fCurrency } from 'src/utils/format-number';
+import { formatNairaAmount } from 'src/utils/format-naira-short';
 
 import { bgGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
-import { formatNairaAmount } from 'src/utils/format-naira-short';
 
 // ----------------------------------------------------------------------
 

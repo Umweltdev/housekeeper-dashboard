@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -8,10 +8,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 
+import { fetcher, endpoints } from 'src/utils/axios';
+
 import Image from 'src/components/image';
 import { varFade, MotionContainer } from 'src/components/animate';
-import Carousel, { useCarousel, CarouselDots, CarouselArrows } from 'src/components/carousel';
-import { fetcher, endpoints } from 'src/utils/axios'; // Assuming axios utility is used here
+import Carousel, { useCarousel, CarouselDots, CarouselArrows } from 'src/components/carousel'; // Assuming axios utility is used here
 
 // ----------------------------------------------------------------------
 

@@ -1,27 +1,19 @@
-import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useRef, useState } from 'react';
 
+import { Box, useTheme } from '@mui/system';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { Button, Select, MenuItem } from '@mui/material';
 
-import { bgcolor, Box, useTheme } from '@mui/system';
-import { Button, colors, MenuItem, Select } from '@mui/material';
 import { useGetRooms } from 'src/api/room';
-import { useGetRoomType } from 'src/api/roomType';
-import { useGetBookings } from 'src/api/booking';
 import { useGetFloors } from 'src/api/floor';
-
-import {
-  _analyticTasks,
-  _analyticPosts,
-  _analyticTraffic,
-  _analyticOrderTimeline,
-} from 'src/_mock';
+import { useGetBookings } from 'src/api/booking';
+import { useGetRoomType } from 'src/api/roomType';
+import { info, success, warning } from 'src/theme/palette';
 
 import { useSettingsContext } from 'src/components/settings';
-
-import { info, success, warning } from 'src/theme/palette';
 
 // import AnalyticsNews from '../analytics-news';
 // import AnalyticsTasks from '../analytics-tasks';
@@ -32,40 +24,39 @@ import AnalyticsWidgetSummary from '../analytics-widget-summary';
 // import AnalyticsTrafficBySite from '../analytics-traffic-by-site';
 // import AnalyticsCurrentSubject from '../analytics-current-subject';
 // import AnalyticsConversionRates from '../analytics-conversion-rates';
+import InquiriesChart from '../analytics-Inquiry-chart';
+import AnalyticsPeakChart from '../analytics-peak-chart';
+import AnalyticsStackChart from '../analytics-stack-chart';
+import InquiryTypeChart from '../analytics-inquiry-type-chart';
+import AnalyticsWebsiteVisits from '../analytics-website-visits';
+import AnalyticsVerticalChart from '../analytics-vertical-chart';
 // import CheckInAnalytics from './checkin-analytics';
 import AnalyticsAggregateChart from '../analytics-aggregate-chart';
-import AnalyticsAverageTimeChart from '../analytics-average-time-chart';
-import AnalyticsPeakChart from '../analytics-peak-chart';
-import AppWidgetSummaryReservation from '../../app/app-widget-summary-reservation';
-import AppWidgetSummaryTotal from '../../app/app-widget-summary-total';
-import AnalyticsSimpleCardChart from '../analytics-simple-card-chart';
+import AnalyticsStackBarByFloor from '../analytic-stack-bar-chart';
 import AnalyticsConversionRates from '../analytics-conversion-rates';
+import AnalyticsSimpleCardChart from '../analytics-simple-card-chart';
+import AppWidgetSummaryTotal from '../../app/app-widget-summary-total';
+import AnalyticsAverageTimeChart from '../analytics-average-time-chart';
+import AnalyticsResolutionTimeCard from '../analytics-resolution-time-card';
+import RoomStatusDifferentialChart from '../analytics-room-status-diff-chart';
+import AppWidgetSummaryReservation from '../../app/app-widget-summary-reservation';
+import RoomStatusDiscrepancyChart from '../analytics-room-status-descripancy-chart';
+import InquiryResolutionTimeChart from '../analytics-average-resolution-time-chart';
+import AnalyticsSatisfactionDonutChart from '../analytics-satisfaction-donut-chart';
 import {
-  BOOKING_LEAD_TIME_DATA,
+  inquiryTypeData,
+  totalComplaints,
   cancellationData,
   dummyInquiryData,
-  dummyResolutionTimeData,
-  guestSatisfactionData,
-  inquiryTypeData,
-  RESERVATION_CHANNEL_DATA,
   reservationsData,
-  resolutionTimeData,
-  roomStatusDiscrepancyData,
-  totalComplaints,
   totalRevenueData,
+  resolutionTimeData,
+  guestSatisfactionData,
+  BOOKING_LEAD_TIME_DATA,
+  dummyResolutionTimeData,
+  RESERVATION_CHANNEL_DATA,
+  roomStatusDiscrepancyData,
 } from './dummData';
-
-import AnalyticsWebsiteVisits from '../analytics-website-visits';
-import AnalyticsStackChart from '../analytics-stack-chart';
-import AnalyticsStackBarByFloor from '../analytic-stack-bar-chart';
-import RoomStatusDifferentialChart from '../analytics-room-status-diff-chart';
-import RoomStatusDiscrepancyChart from '../analytics-room-status-descripancy-chart';
-import AnalyticsVerticalChart from '../analytics-vertical-chart';
-import InquiriesChart from '../analytics-Inquiry-chart';
-import InquiryResolutionTimeChart from '../analytics-average-resolution-time-chart';
-import InquiryTypeChart from '../analytics-inquiry-type-chart';
-import AnalyticsResolutionTimeCard from '../analytics-resolution-time-card';
-import AnalyticsSatisfactionDonutChart from '../analytics-satisfaction-donut-chart';
 
 // ----------------------------------------------------------------------
 

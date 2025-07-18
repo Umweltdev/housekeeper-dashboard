@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
-import { Divider, Grid } from '@mui/material';
+import { Divider } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
@@ -22,11 +22,9 @@ import InputLabel from '@mui/material/InputLabel';
 import axiosInstance from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { _roles } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -48,7 +46,6 @@ import {
 
 import { useGetProducts } from 'src/api/product';
 
-import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
 import AppWidgetSummaryTotal from 'src/sections/overview/app/app-widget-summary-total';
 
 import UserTableRow from '../user-table-row';

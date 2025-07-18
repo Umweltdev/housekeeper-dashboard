@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { useCallback, useState, useEffect, useMemo } from 'react';
 import orderBy from 'lodash/orderBy';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -8,12 +8,12 @@ import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useGetRooms } from 'src/api/room';
@@ -67,7 +67,7 @@ export default function CalendarFilters({ open, onClose }) {
     // Filter by availability within date range
     if (startDate && endDate && !dateError) {
       filtered = filtered.filter((room) => {
-        const isAvailable = room.isAvailable;
+        const {isAvailable} = room;
         const isWithinRange = !room.checkOut || new Date(room.checkOut) <= endDate;
         return isAvailable && isWithinRange;
       });

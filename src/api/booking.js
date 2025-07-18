@@ -1,5 +1,6 @@
 import useSWR, { mutate } from 'swr';
-import { useCallback, useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
+
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetBookings() {

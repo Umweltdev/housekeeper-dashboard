@@ -2,37 +2,22 @@
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
-import { Divider, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import Label from 'src/components/label';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 import axiosInstance from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useGetUsers } from 'src/api/user';
 
-import { _roles } from 'src/_mock';
 
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -40,13 +25,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import {
   useTable,
-  emptyRows,
-  TableNoData,
   getComparator,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
 } from 'src/components/table';
 
 import InvoiceListViewEdit from 'src/sections/invoice/view/invoice-list-viewEdit';
@@ -54,12 +33,7 @@ import InvoiceListViewEdit from 'src/sections/invoice/view/invoice-list-viewEdit
 import { useGetBookings } from 'src/api/booking';
 
 import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
-import AppWidgetSummaryReservation from 'src/sections/overview/app/app-widget-summary-reservation';
-import AppWidgetSummaryTotal from 'src/sections/overview/app/app-widget-summary-total';
 
-import UserTableRow from '../user-table-row';
-import UserTableToolbar from '../user-table-toolbar';
-import UserTableFiltersResult from '../user-table-filters-result';
 
 // ----------------------------------------------------------------------
 

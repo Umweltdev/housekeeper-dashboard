@@ -7,12 +7,13 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import { paths } from 'src/routes/paths';
 
+import axiosInstance from 'src/utils/axios';
+
 import { useGetBooking } from 'src/api/booking';
-import { useGetInvoice, useGetInvoices } from 'src/api/invoice';
+import { useGetInvoice } from 'src/api/invoice';
 import { ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
-import axiosInstance from 'src/utils/axios';
 
 import OrderDetailsInfo from '../order-details-info';
 import OrderDetailsItems from '../order-details-item';

@@ -1,6 +1,7 @@
 import useSWR, { mutate } from 'swr';
-import { useCallback, useMemo } from 'react';
-import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
+import { useMemo, useCallback } from 'react';
+
+import { fetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 

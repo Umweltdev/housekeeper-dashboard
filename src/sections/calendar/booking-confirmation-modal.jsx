@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router';
+import React, { useState, useEffect } from 'react';
+
+import { styled } from '@mui/system';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Typography,
+  Box,
   Grid,
+  Paper,
+  Stack,
+  Dialog,
   Avatar,
   Button,
   Divider,
-  Box,
-  Paper,
-  Stack,
   TextField,
-  Select,
-  MenuItem,
+  Typography,
   IconButton,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
-import { styled } from '@mui/system';
-import { useGetBookings } from 'src/api/booking';
-import Iconify from 'src/components/iconify';
+
+import axiosInstance from 'src/utils/axios';
 import { fDateTime } from 'src/utils/format-time';
 import { formatNairaAmountLong } from 'src/utils/format-naira-short';
-import axiosInstance from 'src/utils/axios';
-import { useNavigate } from 'react-router';
+
+import { useGetBookings } from 'src/api/booking';
+
+import Iconify from 'src/components/iconify';
+
 import makeToast from '../tour/assets/toaster';
 
 const ImageContainer = styled(Box)({

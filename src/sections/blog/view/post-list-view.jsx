@@ -1,5 +1,4 @@
 /* eslint-disable perfectionist/sort-imports */
-import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -11,10 +10,6 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 
 import axiosInstance from 'src/utils/axios';
 import { paths } from 'src/routes/paths';

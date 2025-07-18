@@ -1,5 +1,6 @@
-import { Divider, Grid, Typography } from '@mui/material';
 import React from 'react';
+
+import { Grid, Divider, Typography } from '@mui/material';
 
 import { useGetBookings } from 'src/api/booking';
 

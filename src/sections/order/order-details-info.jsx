@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
@@ -16,8 +14,7 @@ import Iconify from 'src/components/iconify';
 
 export default function OrderDetailsInfo({ invoiceTo, delivery, payment, shippingAddress }) {
   const renderCustomer = (
-    <>
-      <Stack spacing={2} sx={{ p: 3 }}>
+    <Stack spacing={2} sx={{ p: 3 }}>
         {/* Avatar at the top */}
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Avatar
@@ -57,7 +54,6 @@ export default function OrderDetailsInfo({ invoiceTo, delivery, payment, shippin
           </Button> */}
         </Stack>
       </Stack>
-    </>
   );
 
   const renderPayment = (

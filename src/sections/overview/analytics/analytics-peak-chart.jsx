@@ -1,18 +1,20 @@
 // file: src/sections/overview/CheckInPeakLineChart.js
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
-import { Card, CardHeader, MenuItem, TextField } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
-import Chart, { useChart } from 'src/components/chart';
 import {
   format,
   parseISO,
-  startOfHour,
   startOfDay,
+  startOfHour,
   startOfWeek,
-  startOfMonth,
   startOfYear,
+  startOfMonth,
 } from 'date-fns';
+
+import { styled, useTheme } from '@mui/material/styles';
+import { Card, MenuItem, TextField, CardHeader } from '@mui/material';
+
+import Chart, { useChart } from 'src/components/chart';
 
 const CHART_HEIGHT = 250;
 

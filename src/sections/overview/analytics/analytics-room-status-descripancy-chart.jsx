@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
+
 import { Box, Card, CardHeader } from '@mui/material';
+
 import Chart, { useChart } from 'src/components/chart';
 
 export default function RoomStatusDiscrepancyChart({ title, subheader, chart, ...other }) {

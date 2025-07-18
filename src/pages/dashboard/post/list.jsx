@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 
-import { PostListView } from 'src/sections/blog/view';
 import { useGetPosts } from 'src/api/blog';
+
+import { PostListView } from 'src/sections/blog/view';
 
 // ----------------------------------------------------------------------
 

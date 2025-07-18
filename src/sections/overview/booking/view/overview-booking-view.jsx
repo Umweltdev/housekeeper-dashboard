@@ -6,7 +6,6 @@ import { Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useGetBookings } from 'src/api/booking';
 import { useGetUsers } from 'src/api/user';
-import { _bookingsOverview } from 'src/_mock';
 import {
   BookingIllustration,
   CheckInIllustration,

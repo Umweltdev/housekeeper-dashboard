@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
+
 import { Box, Card, CardHeader } from '@mui/material';
+
+import { info, error, success, warning } from 'src/theme/palette';
+
 import Chart, { useChart } from 'src/components/chart';
-import { error, info, success, warning } from 'src/theme/palette';
 
 function getRoomStatusBreakdown(rooms) {
   let ready = 0;

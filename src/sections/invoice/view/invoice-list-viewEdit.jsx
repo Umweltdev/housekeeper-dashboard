@@ -7,9 +7,7 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
-import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -17,14 +15,11 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance from 'src/utils/axios';
 import { isAfter, isBetween } from 'src/utils/format-time';
 
-import { useGetInvoices } from 'src/api/invoice';
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
@@ -32,10 +27,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { Typography } from '@mui/material';
 import { useSettingsContext } from 'src/components/settings';
-
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -47,9 +39,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import InvoiceAnalytic from '../invoice-analytic';
-import CleaningTaskTableRow from '../cleaning-task-edit-row';
 import InvoiceTableToolbar from '../invoice-table-toolbar';
+import CleaningTaskTableRow from '../cleaning-task-edit-row';
 import InvoiceTableFiltersResult from '../invoice-table-filters-result';
 
 // ----------------------------------------------------------------------

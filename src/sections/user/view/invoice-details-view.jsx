@@ -9,8 +9,6 @@ import { useGetInvoice } from 'src/api/invoice';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import InvoiceDetails from '../invoice-details';
-
 // ----------------------------------------------------------------------
 
 export default function InvoiceDetailsView({ id }) {
@@ -18,7 +16,7 @@ export default function InvoiceDetailsView({ id }) {
 
   const { invoice: currentInvoice } = useGetInvoice(id);
 
-  console.log("currentInvoice", currentInvoice);
+  console.log('currentInvoice', currentInvoice);
   // const currentInvoice = _invoices.filter((invoice) => invoice.id === id)[0];
 
   return (
@@ -38,8 +36,6 @@ export default function InvoiceDetailsView({ id }) {
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
-
-      <InvoiceDetails invoice={currentInvoice} />
     </Container>
   );
 }

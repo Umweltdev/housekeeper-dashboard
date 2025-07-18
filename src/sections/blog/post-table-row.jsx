@@ -1,15 +1,16 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import Dialog from '@mui/material/Dialog';
 import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
-import Dialog from '@mui/material/Dialog';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -17,8 +18,8 @@ import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import PostQuickEditForm from './post-quick-edit-form';
 import PostNewEditForm from './post-new-edit-form';
+import PostQuickEditForm from './post-quick-edit-form';
 
 export default function UserTableRow({ row, selected, onEditRow, onViewRow, onSelectRow, onDeleteRow }) {
   const { customerName, img, email, orderNumber, status, roomNumber, roomType, rooms } = row;

@@ -1,4 +1,4 @@
-import { startOfWeek, startOfMonth, startOfYear, format } from 'date-fns';
+import { format, startOfWeek, startOfYear, startOfMonth } from 'date-fns';
 
 export function groupAverageStay(bookings) {
   const result = {

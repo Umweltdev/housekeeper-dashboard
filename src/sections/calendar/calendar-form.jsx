@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { mutate } from 'swr';
+import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 
 // MUI Components
 import Box from '@mui/material/Box';
@@ -9,23 +9,23 @@ import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
   Chip,
+  Select,
+  MenuItem,
+  TextField,
+  InputLabel,
   Typography,
-  DialogTitle,
+  FormControl,
 } from '@mui/material';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useGetRooms } from 'src/api/room';
+import { useGetBooking } from 'src/api/booking';
+import { useGetRoomType } from 'src/api/roomType';
 
 // Custom Hooks and Utils
 import { useSnackbar } from 'src/components/snackbar';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useGetBooking } from 'src/api/booking';
-import { useGetRooms } from 'src/api/room';
-import { useGetRoomType } from 'src/api/roomType';
-import { fTimestamp } from 'src/utils/format-time';
 
 // Components
 import BookingConfirmationModal from './booking-confirmation-modal';

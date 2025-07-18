@@ -1,37 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { addDays } from 'date-fns';
+import { enUS } from 'date-fns/locale';
+import { useParams } from 'react-router';
+import 'react-date-range/dist/styles.css';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/theme/default.css';
+
 import {
   Box,
-  Button,
+  Menu,
   Modal,
+  Table,
+  Button,
   Select,
   MenuItem,
-  Table,
+  TableRow,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
-  TableRow,
-  Typography,
   TextField,
-  InputAdornment,
-  FormControl,
+  Typography,
   InputLabel,
-  CircularProgress,
   IconButton,
-  Menu,
+  FormControl,
+  TableContainer,
+  InputAdornment,
+  CircularProgress,
   MenuItem as DropdownMenuItem,
 } from '@mui/material';
-import Iconify from 'src/components/iconify';
-import { useParams } from 'react-router';
-import { useGetRooms } from 'src/api/room';
-import { useRoomType } from 'src/api/roomType';
+
 import axiosInstance from 'src/utils/axios';
 
-import { DateRange } from 'react-date-range';
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
-import { enUS } from 'date-fns/locale';
+import { useGetRooms } from 'src/api/room';
+import { useRoomType } from 'src/api/roomType';
+
+import Iconify from 'src/components/iconify';
 
 import CheckoutPage from './CheckoutPage';
 

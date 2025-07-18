@@ -1,8 +1,11 @@
-import { Box } from '@mui/system';
 import React from 'react';
+
+import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
-import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
+
 import { useGetRooms } from 'src/api/room';
+
+import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
 
 const AnalyticTable = () => {
   const theme = useTheme();

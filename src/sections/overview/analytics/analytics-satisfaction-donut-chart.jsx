@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
-import { Card, CardHeader, Box } from '@mui/material';
-import Chart, { useChart } from 'src/components/chart';
+
+import { Box, Card, CardHeader } from '@mui/material';
+
 import { info, success, warning } from 'src/theme/palette';
+
+import Chart, { useChart } from 'src/components/chart';
 
 export default function AnalyticsSatisfactionDonutChart({ title, subheader, data }) {
   const chartOptions = useChart({

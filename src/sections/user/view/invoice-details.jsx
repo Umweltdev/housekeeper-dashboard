@@ -61,15 +61,13 @@ export default function InvoiceDetails({ invoice }) {
 
   
   const renderTotal = (
-    <>
-      <StyledTableRow>
+    <StyledTableRow>
         <TableCell colSpan={3} />
         <TableCell sx={{ typography: 'subtitle1' }}>Total</TableCell>
         <TableCell width={140} sx={{ typography: 'subtitle1' }}>
           {`₦${invoice?.totalAmount.toLocaleString()}`}
         </TableCell>
       </StyledTableRow>
-    </>
   );
 
   const renderFooter = (

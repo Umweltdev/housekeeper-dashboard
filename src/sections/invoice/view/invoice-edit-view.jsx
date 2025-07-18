@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+
 import { useGetInvoice } from 'src/api/invoice';
 
 import { useSettingsContext } from 'src/components/settings';

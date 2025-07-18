@@ -1,24 +1,22 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useFormContext } from 'react-hook-form';
 
-import { TextField } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-import { useGetBookings } from 'src/api/booking';
 
 import { _addressBooks } from 'src/_mock';
+import { useGetBookings } from 'src/api/booking';
 
 import Iconify from 'src/components/iconify';
-
-import { AddressListDialog } from '../address';
 
 // ----------------------------------------------------------------------
 
@@ -108,7 +106,7 @@ export default function InvoiceNewEditAddress() {
         </Stack>
       </Stack>
 
-      <AddressListDialog
+      {/* <AddressListDialog
         title="Customers"
         open={createDialog.value}
         onClose={createDialog.onFalse}
@@ -142,7 +140,7 @@ export default function InvoiceNewEditAddress() {
             New
           </Button>
         }
-      />
+      /> */}
 
       <CreateAddress
         open={editDialog.value}
@@ -188,42 +186,40 @@ const CreateAddress = ({
     dialog.onFalse();
   };
   return (
-    <>
-      <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
-        <Stack sx={{ p: 3 }} gap={4}>
-          <Typography variant="h6"> {title} </Typography>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
+      <Stack sx={{ p: 3 }} gap={4}>
+        <Typography variant="h6"> {title} </Typography>
 
-          <TextField
-            name="name"
-            value={obj.name}
-            onChange={(event) => {
-              setObj({ ...obj, name: event.target.value });
-            }}
-            label="Full Name"
-          />
-          <TextField
-            name="fullAddress"
-            value={obj.fullAddress}
-            onChange={(event) => {
-              setObj({ ...obj, fullAddress: event.target.value });
-            }}
-            label="Full-Address"
-          />
-          <TextField
-            name="phoneNumber"
-            value={obj.phoneNumber}
-            onChange={(event) => {
-              setObj({ ...obj, phoneNumber: event.target.value });
-            }}
-            label="Phone-Number"
-          />
+        <TextField
+          name="name"
+          value={obj.name}
+          onChange={(event) => {
+            setObj({ ...obj, name: event.target.value });
+          }}
+          label="Full Name"
+        />
+        <TextField
+          name="fullAddress"
+          value={obj.fullAddress}
+          onChange={(event) => {
+            setObj({ ...obj, fullAddress: event.target.value });
+          }}
+          label="Full-Address"
+        />
+        <TextField
+          name="phoneNumber"
+          value={obj.phoneNumber}
+          onChange={(event) => {
+            setObj({ ...obj, phoneNumber: event.target.value });
+          }}
+          label="Phone-Number"
+        />
 
-          <Button size="large" variant="outlined" color="inherit" onClick={handleSubmit}>
-            Submit
-          </Button>
-        </Stack>
-      </Dialog>
-    </>
+        <Button size="large" variant="outlined" color="inherit" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Stack>
+    </Dialog>
   );
 };
 

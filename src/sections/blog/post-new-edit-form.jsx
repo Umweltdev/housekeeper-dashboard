@@ -1,26 +1,23 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import axiosInstance from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
 
-import { useSnackbar } from 'src/components/snackbar';
 import Label from 'src/components/label';
-import axiosInstance from 'src/utils/axios';
+import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
-  RHFTextField,
   RHFUploadAvatar,
 } from 'src/components/hook-form';
 

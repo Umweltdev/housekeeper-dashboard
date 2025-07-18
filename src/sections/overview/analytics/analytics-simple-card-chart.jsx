@@ -1,6 +1,7 @@
-import { Card, CardContent, Typography, Box, Select, MenuItem, useTheme } from '@mui/material';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+
+import { Box, Card, Select, MenuItem, useTheme, Typography, CardContent } from '@mui/material';
 
 export default function AnalyticsSimpleCardChart({ title }) {
   const theme = useTheme();

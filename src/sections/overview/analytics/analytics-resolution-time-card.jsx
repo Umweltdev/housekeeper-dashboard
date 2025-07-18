@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
-import { Card, CardContent, Typography, Box, Select, MenuItem } from '@mui/material';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+
+import { Box, Card, Select, MenuItem, Typography, CardContent } from '@mui/material';
 
 export default function AnalyticsResolutionTimeCard({ title, resolutionData, ...other }) {
   const [range, setRange] = useState('day');

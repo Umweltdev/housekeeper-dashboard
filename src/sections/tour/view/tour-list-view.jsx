@@ -4,14 +4,10 @@ import { useState, useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { TOUR_SORT_OPTIONS } from 'src/_mock';
 
-import Label from 'src/components/label';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
@@ -20,7 +16,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useGetRoomType } from 'src/api/roomType';
 import TourList from '../tour-list';
-import TourSort from '../tour-sort';
 import AnalyticTable from './analytic-table';
 
 // import TourFilters from '../tour-filters';

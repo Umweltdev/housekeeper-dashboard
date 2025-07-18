@@ -1,18 +1,21 @@
 // file: src/sections/overview/CheckInChart.js
 import PropTypes from 'prop-types';
 import { useMemo, useState, useCallback } from 'react';
-import { Card, CardHeader, MenuItem, TextField } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
-import Chart, { useChart } from 'src/components/chart';
-import { fNumber } from 'src/utils/format-number';
 import {
   parseISO,
-  differenceInHours,
   differenceInDays,
+  differenceInHours,
   differenceInWeeks,
-  differenceInMonths,
   differenceInYears,
+  differenceInMonths,
 } from 'date-fns';
+
+import { styled, useTheme } from '@mui/material/styles';
+import { Card, MenuItem, TextField, CardHeader } from '@mui/material';
+
+import { fNumber } from 'src/utils/format-number';
+
+import Chart, { useChart } from 'src/components/chart';
 
 const CHART_HEIGHT = 400;
 const LEGEND_HEIGHT = 72;

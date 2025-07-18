@@ -1,26 +1,26 @@
 /* eslint-disable spaced-comment */
 
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Unstable_Grid2';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
-import { useSnackbar } from 'notistack';
 import { paths } from 'src/routes/paths';
-import { useGetUser } from 'src/api/user';
 
 import axiosInstance from 'src/utils/axios';
+
+import { useGetUser } from 'src/api/user';
 
 import Label from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';

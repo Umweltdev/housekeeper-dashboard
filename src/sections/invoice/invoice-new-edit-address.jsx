@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useFormContext } from 'react-hook-form';
 
-import { TextField } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-import { useGetBookings } from 'src/api/booking';
 
 import { _addressBooks } from 'src/_mock';
+import { useGetBookings } from 'src/api/booking';
 
 import Iconify from 'src/components/iconify';
 
@@ -188,8 +188,7 @@ const CreateAddress = ({
     dialog.onFalse();
   };
   return (
-    <>
-      <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
         <Stack sx={{ p: 3 }} gap={4}>
           <Typography variant="h6"> {title} </Typography>
 
@@ -223,7 +222,6 @@ const CreateAddress = ({
           </Button>
         </Stack>
       </Dialog>
-    </>
   );
 };
 
