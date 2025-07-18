@@ -101,36 +101,36 @@ export function useNavData() {
         subheader: t('management'),
         items: [
           // CALENDAR
-          {
-            title: t('reservation'),
-            path: paths.dashboard.calendar,
-            icon: ICONS.calendar,
-          },
+          // {
+          //   title: t('reservation'),
+          //   path: paths.dashboard.calendar,
+          //   icon: ICONS.calendar,
+          // },
           // ROOMS
-          {
-            title: t('update room status'),
-            path: paths.dashboard.room.root,
-            icon: ICONS.product,
-            children: [
-              { title: t('list'), path: paths.dashboard.room.root },
-              // { title: t('details'), path: paths.dashboard.room.demo.details },
-              // { title: t('create'), path: paths.dashboard.room.new },
-              // { title: t('edit'), path: paths.dashboard.room.demo.edit },
-            ],
-          },
+          // {
+          //   title: t('update room status'),
+          //   path: paths.dashboard.room.root,
+          //   icon: ICONS.product,
+          //   children: [
+          //     { title: t('list'), path: paths.dashboard.room.root },
+          //     // { title: t('details'), path: paths.dashboard.room.demo.details },
+          //     // { title: t('create'), path: paths.dashboard.room.new },
+          //     // { title: t('edit'), path: paths.dashboard.room.demo.edit },
+          //   ],
+          // },
           // USER
           {
-            title: t('Guests Check-in'),
-            path: paths.dashboard.user.root,
-            icon: ICONS.user,
-            children: [
-              // { title: t('profile'), path: paths.dashboard.user.root },
-              // { title: t('cards'), path: paths.dashboard.user.cards },
-              { title: t('list'), path: paths.dashboard.user.list },
-              // { title: t('create'), path: paths.dashboard.user.new },
-              // { title: t('edit'), path: paths.dashboard.user.demo.edit },
-              // { title: t('account'), path: paths.dashboard.user.account },
-            ],
+            title: t('my task'),
+            path: paths.dashboard.user.list,
+            icon: ICONS.blog,
+            // children: [
+            //   // { title: t('profile'), path: paths.dashboard.user.root },
+            //   // { title: t('cards'), path: paths.dashboard.user.cards },
+            //   { title: t('list'), path: paths.dashboard.user.list },
+            //   // { title: t('create'), path: paths.dashboard.user.new },
+            //   // { title: t('edit'), path: paths.dashboard.user.demo.edit },
+            //   // { title: t('account'), path: paths.dashboard.user.account },
+            // ],
           },
 
           // ORDER
@@ -148,14 +148,12 @@ export function useNavData() {
           // deploy
 
           // PRODUCT
-           {
-             title: t('Complaints'),
-             path: paths.dashboard.event.root,
-             icon: ICONS.ecommerce,
-             children: [
-               { title: t('list'), path: paths.dashboard.event.new },
-             ],
-           },
+          {
+            title: t('Complaints'),
+            path: paths.dashboard.event.root,
+            icon: ICONS.ecommerce,
+            children: [{ title: t('list'), path: paths.dashboard.event.new }],
+          },
 
           // INVOICE
           {

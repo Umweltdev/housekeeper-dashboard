@@ -18,7 +18,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-
+import Label from 'src/components/label';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import axiosInstance from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -46,6 +48,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+
+import InvoiceListViewEdit from 'src/sections/invoice/view/invoice-list-viewEdit';
 
 import { useGetBookings } from 'src/api/booking';
 
@@ -210,37 +214,38 @@ export default function UserListView() {
 
   const calculateAverageCheckinTime = () => {
     if (checkInDates.length === 0) return 'No data';
-    
+
     // Filter by selected month if needed
-    const filteredDates = selectedMonth === 'all' 
-      ? checkInDates 
-      : checkInDates.filter(date => date.getMonth() + 1 === Number(selectedMonth));
-    
+    const filteredDates =
+      selectedMonth === 'all'
+        ? checkInDates
+        : checkInDates.filter((date) => date.getMonth() + 1 === Number(selectedMonth));
+
     if (filteredDates.length === 0) return 'No data';
-    
+
     // Calculate average hour
     const totalHours = filteredDates.reduce((sum, date) => sum + date.getHours(), 0);
     const avgHour = Math.round(totalHours / filteredDates.length);
-    
+
     // Format as time (e.g., "2:30 PM")
     const avgDate = new Date();
     avgDate.setHours(avgHour, 0, 0, 0);
     return avgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
-  
+
   const calculateHourlyCheckinDistribution = () => {
     const hourlyCounts = Array(24).fill(0);
-    
-    checkInDates.forEach(date => {
+
+    checkInDates.forEach((date) => {
       const hour = date.getHours();
       hourlyCounts[hour]++;
     });
-    
+
     // Normalize to percentage for chart
     const maxCount = Math.max(...hourlyCounts);
-    return hourlyCounts.map(count => maxCount ? Math.round((count / maxCount) * 100) : 0);
+    return hourlyCounts.map((count) => (maxCount ? Math.round((count / maxCount) * 100) : 0));
   };
-  
+
   // Process bookings data
   bookings.forEach((booking) => {
     booking.rooms.forEach((room) => {
@@ -272,9 +277,10 @@ export default function UserListView() {
   const calculateMonthlyAverage = () => {
     if (checkInDates.length === 0) return 0;
 
-    const filteredDates = selectedMonth === 'all' 
-      ? checkInDates 
-      : checkInDates.filter(date => date.getMonth() + 1 === Number(selectedMonth));
+    const filteredDates =
+      selectedMonth === 'all'
+        ? checkInDates
+        : checkInDates.filter((date) => date.getMonth() + 1 === Number(selectedMonth));
 
     if (filteredDates.length === 0) return 0;
 
@@ -286,7 +292,8 @@ export default function UserListView() {
   };
 
   const averageCheckInsPerDay = calculateMonthlyAverage();
-  const averageCheckInsPerHour = checkInDates.length > 0 ? (averageCheckInsPerDay / 24).toFixed(2) : 0;
+  const averageCheckInsPerHour =
+    checkInDates.length > 0 ? (averageCheckInsPerDay / 24).toFixed(2) : 0;
 
   const guestChartData = {
     month: Object.values(monthlyGuests),
@@ -297,61 +304,82 @@ export default function UserListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+          heading="My Task"
+          links={[
+            { name: 'Dashboard', href: paths.dashboard.root },
+            // { name: 'Check-In', href: paths.dashboard.booking.root },
+            { name: 'List' },
+          ]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
+        {/* <Divider /> */}
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            gap: 3,
+            rowGap: 4,
+            columnGap: 3,
             justifyContent: 'center',
             alignItems: 'stretch',
             flexWrap: 'wrap',
-            mx: 3,
+            mb: 4,
           }}
         >
           <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummaryTotal
-              title="Average no of Guests"
-              percent={2.6}
-              totals={{ 
-                month: guestChartData.month.reduce((a, b) => a + b, 0), 
-                week: guestChartData.week.reduce((a, b) => a + b, 0)/4,
-                day: guestChartData.day.reduce((a, b) => a + b, 0)/28,
+            <AppWidgetSummary
+              title="Total Task"
+              icon="bi:list-task"
+              iconColor="info.main"
+              total={23}
+              chart={{
+                colors: [theme.palette.success.light, theme.palette.success.main],
+                series: [3, 5, 2, 4, 6, 2, 1, 1, 0],
               }}
-              chartData={guestChartData}
-              onTimeframeChange={setSelectedTimeframe}
-              selectedTimeframe={selectedTimeframe}
             />
           </Box>
 
           <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-  <AppWidgetSummaryTotal
-    title="Average Check-ins"
-    percent={0.2}
-    totals={{ 
-      month: averageCheckInsPerDay * 30,
-      week: averageCheckInsPerDay * 7, 
-      day: averageCheckInsPerDay
-    }}
-    chartData={{
-      month: [/* Your monthly data series */],
-      week: [/* Your weekly data series */], 
-      day: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26] // Your existing daily series
-    }}
-    onTimeframeChange={setSelectedMonth} // Connects to your month selector
-    selectedTimeframe={selectedMonth}
-    chartColors={[theme.palette.info.light, theme.palette.info.main]}
-  />
-</Box>
-<Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-  <AppWidgetSummary
-    title="Average Check-in Time"
-    total={calculateAverageCheckinTime()}
-    chart={{
-      colors: [theme.palette.success.light, theme.palette.success.main],
-      series: calculateHourlyCheckinDistribution(),
-    }}
-  />
-</Box>
+            <AppWidgetSummary
+              title="High Priority"
+              icon="iconoir:priority-high-solid"
+              iconColor="error.main"
+              total={23}
+              chart={{
+                colors: [theme.palette.success.light, theme.palette.success.main],
+                series: [3, 5, 2, 4, 6, 2, 1],
+              }}
+            />
+          </Box>
+          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
+            <AppWidgetSummary
+              title="In Progress"
+              total={18}
+              percent={+8}
+              icon="grommet-icons:in-progress"
+              iconColor="warning.main"
+              chart={{
+                colors: [theme.palette.warning.light, theme.palette.warning.main],
+                series: [4, 2, 6, 8, 5],
+              }}
+            />
+          </Box>
+
+          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
+            <AppWidgetSummary
+              title="Completed Tasks"
+              iconColor="success.main"
+              total={18}
+              percent={+12}
+              icon="solar:check-circle-bold-duotone"
+              chart={{
+                colors: [theme.palette.success.light, theme.palette.success.main],
+                series: [1, 2, 3, 4, 5],
+              }}
+            />
+          </Box>
 
           {/* <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
             <AppWidgetSummary
@@ -365,138 +393,7 @@ export default function UserListView() {
             />
           </Box> */}
         </Box>
-
-        <Divider sx={{ my: 3, mx: 3 }} />
-        
-        <CustomBreadcrumbs
-          heading="List"
-          links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'Check-In', href: paths.dashboard.booking.root },
-            { name: 'List' },
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.calendar}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New
-            </Button>
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
-
-        <Card>
-          <UserTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-            roleOptions={_roles}
-          />
-
-          {canReset && (
-            <UserTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              onResetFilters={handleResetFilters}
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
-
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered.map((row) => row.id)
-                    )
-                  }
-                />
-
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <UserTableRow
-                        key={row._id}
-                        row={{
-                          id: row._id,
-                          customerName: row.customer.name,
-                          email: row.customer.email,
-                          orderNumber: row.orderNumber,
-                          status: row.totalPrice.toLocaleString(),
-                          phoneNumber: row.customer.phone,
-                          roomImg: row.rooms?.[0]?.roomId?.roomType?.images[0] || 'N/A',
-                          floor: row.rooms?.[0]?.roomId?.floor || 'N/A',
-                          stats: row.status,
-                          checkIn: row.rooms?.[0]?.checkIn,
-                          checkOut: row.rooms?.[0]?.checkOut,
-                          roomNumber: row.rooms?.[0]?.roomId?.roomNumber || 'N/A',
-                          roomType: row.rooms?.[0]?.roomId?.roomType?.title || 'N/A',
-                        }}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
-                      />
-                    ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
+        <InvoiceListViewEdit />
       </Container>
 
       <ConfirmDialog
@@ -539,8 +436,8 @@ function applyFilter({ inputData, comparator, filters }) {
   filteredData = filteredData.filter((booking) => booking.status === 'paid');
 
   if (name) {
-    filteredData = filteredData.filter(
-      (booking) => booking.customer.name.toLowerCase().includes(name.toLowerCase())
+    filteredData = filteredData.filter((booking) =>
+      booking.customer.name.toLowerCase().includes(name.toLowerCase())
     );
   }
 
