@@ -151,26 +151,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
         <InvoiceNewEditDetails />
       </Card>
 
-      <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-        {/* <LoadingButton
-          color="inherit"
-          size="large"
-          variant="outlined"
-          loading={loadingSave.value && isSubmitting}
-          onClick={handleSaveAsDraft}
-        >
-          Save as Draft
-        </LoadingButton> */}
-
-        <LoadingButton
-          size="large"
-          variant="contained"
-          loading={loadingSend.value && isSubmitting}
-          onClick={handleCreateAndSend}
-        >
-          {currentInvoice ? 'Update' : 'Create'} & Send
-        </LoadingButton>
-      </Stack>
+ 
     </FormProvider>
   );
 }

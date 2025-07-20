@@ -117,7 +117,7 @@ export const paths = {
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
       new: `${ROOTS.DASHBOARD}/user/new`,
-      list: `${ROOTS.DASHBOARD}/user/list`,
+      list: `${ROOTS.DASHBOARD}/task/list`,
       cards: `${ROOTS.DASHBOARD}/user/cards`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,
       account: `${ROOTS.DASHBOARD}/user/account`,
@@ -128,6 +128,21 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
       },
     },
+    task: {
+      root: `${ROOTS.DASHBOARD}/task`,
+      new: `${ROOTS.DASHBOARD}/task/new`,
+      list: `${ROOTS.DASHBOARD}/task/list`,
+      cards: `${ROOTS.DASHBOARD}/task/cards`,
+      profile: `${ROOTS.DASHBOARD}/task/profile`,
+      account: `${ROOTS.DASHBOARD}/task/account`,
+      edit: (id) => `${ROOTS.DASHBOARD}/task/${id}/edit`,
+      details: (id) => `${ROOTS.DASHBOARD}/task/${id}`,
+      demo: {
+        details: `${ROOTS.DASHBOARD}/task/${MOCK_ID}`,
+        edit: `${ROOTS.DASHBOARD}/task/${MOCK_ID}/edit`,
+      },
+    },
+
     booking: {
       root: `${ROOTS.DASHBOARD}/booking`,
       new: `${ROOTS.DASHBOARD}/booking/new`,

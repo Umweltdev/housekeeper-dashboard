@@ -39,9 +39,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import InvoiceTableToolbar from '../invoice-table-toolbar';
-import CleaningTaskTableRow from '../cleaning-task-edit-row';
-import InvoiceTableFiltersResult from '../invoice-table-filters-result';
+import InvoiceTableToolbar from './invoice-table-toolbar';
+import CleaningTaskTableRow from './cleaning-task-edit-row';
+import InvoiceTableFiltersResult from './invoice-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -314,7 +314,7 @@ export default function InvoiceListViewEdit() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.task.edit(id));
+      router.push(paths.dashboard.invoice.edit(id));
     },
     [router]
   );
