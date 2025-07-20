@@ -43,6 +43,8 @@ import InvoiceTableToolbar from './invoice-table-toolbar';
 import CleaningTaskTableRow from './cleaning-task-edit-row';
 import InvoiceTableFiltersResult from './invoice-table-filters-result';
 
+import { CLEANING_TASKS } from './cleaning-tasks';
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -65,128 +67,6 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-const CLEANING_TASKS = [
-  {
-    id: '1',
-    room: '101',
-    category: 'Standard',
-    description: 'Full cleaning including bathroom',
-    dueDate: '2023-06-15T10:00:00',
-    priority: 'High',
-    status: 'pending',
-    createDate: '2023-06-10T08:00:00',
-  },
-  {
-    id: '2',
-    room: '202',
-    category: 'Deluxe',
-    description: 'Change bed sheets and towels',
-    dueDate: '2023-06-15T12:00:00',
-    priority: 'Medium',
-    status: 'pending',
-    createDate: '2023-06-10T09:00:00',
-  },
-  {
-    id: '3',
-    room: '305',
-    category: 'Suite',
-    description: 'Deep cleaning after checkout',
-    dueDate: '2023-06-14T14:00:00',
-    priority: 'High',
-    status: 'completed',
-    createDate: '2023-06-09T10:00:00',
-  },
-  {
-    id: '4',
-    room: '107',
-    category: 'Standard',
-    description: 'Quick refresh between guests',
-    dueDate: '2023-06-16T09:00:00',
-    priority: 'Low',
-    status: 'pending',
-    createDate: '2023-06-11T08:00:00',
-  },
-  {
-    id: '5',
-    room: '210',
-    category: 'Deluxe',
-    description: 'VIP guest preparation',
-    dueDate: '2023-06-13T16:00:00',
-    priority: 'High',
-    status: 'completed',
-    createDate: '2023-06-08T11:00:00',
-  },
-  {
-    id: '6',
-    room: '115',
-    category: 'Standard',
-    description: 'Regular daily cleaning',
-    dueDate: '2023-06-15T11:00:00',
-    priority: 'Medium',
-    status: 'pending',
-    createDate: '2023-06-10T10:00:00',
-  },
-  {
-    id: '7',
-    room: '301',
-    category: 'Suite',
-    description: 'Special request: extra towels',
-    dueDate: '2023-06-14T13:00:00',
-    priority: 'Medium',
-    status: 'completed',
-    createDate: '2023-06-09T09:00:00',
-  },
-  {
-    id: '8',
-    room: '204',
-    category: 'Deluxe',
-    description: 'Full cleaning with carpet shampoo',
-    dueDate: '2023-06-16T15:00:00',
-    priority: 'High',
-    status: 'pending',
-    createDate: '2023-06-11T10:00:00',
-  },
-  {
-    id: '9',
-    room: '102',
-    category: 'Standard',
-    description: 'Checkout cleaning',
-    dueDate: '2023-06-14T10:00:00',
-    priority: 'Medium',
-    status: 'completed',
-    createDate: '2023-06-09T08:00:00',
-  },
-  {
-    id: '10',
-    room: '208',
-    category: 'Deluxe',
-    description: 'Prepare for long-term guest',
-    dueDate: '2023-06-15T14:00:00',
-    priority: 'High',
-    status: 'pending',
-    createDate: '2023-06-10T12:00:00',
-  },
-  {
-    id: '11',
-    room: '303',
-    category: 'Suite',
-    description: 'Full service with minibar restock',
-    dueDate: '2023-06-16T11:00:00',
-    priority: 'High',
-    status: 'pending',
-    createDate: '2023-06-11T09:00:00',
-  },
-  {
-    id: '12',
-    room: '110',
-    category: 'Standard',
-    description: 'Quick tidy up',
-    dueDate: '2023-06-15T09:00:00',
-    priority: 'Low',
-    status: 'Completed',
-    createDate: '2023-06-10T07:00:00',
-  },
-];
 export default function InvoiceListViewEdit() {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -254,24 +134,25 @@ export default function InvoiceListViewEdit() {
     );
 
   const TABS = [
-    { value: 'all', label: 'All Task', color: 'default', count: tableData.length },
+    { value: 'all', label: 'All Tasks', color: 'default', count: tableData.length },
     {
-      value: 'completed',
-      label: 'Completed',
+      value: 'cleaned',
+      label: 'Cleaned',
       color: 'success',
-      count: getInvoiceLength('completed'),
+      count: getInvoiceLength('cleaned'),
+    },
+
+    {
+      value: 'inspected',
+      label: 'Inspected',
+      color: 'info',
+      count: getInvoiceLength('inspected'),
     },
     {
-      value: 'pending',
-      label: 'Pending',
-      color: 'warning',
-      count: getInvoiceLength('pending'),
-    },
-    {
-      value: 'high',
-      label: 'High Priority',
+      value: 'dirty',
+      label: 'Dirty',
       color: 'error',
-      count: tableData.filter((item) => item.priority === 'High').length,
+      count: getInvoiceLength('dirty'),
     },
   ];
 
@@ -314,7 +195,7 @@ export default function InvoiceListViewEdit() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.invoice.edit(id));
+      router.push(paths.dashboard.task.edit(id));
     },
     [router]
   );

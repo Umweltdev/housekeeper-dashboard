@@ -20,15 +20,15 @@ export default function InvoiceEditView({ id }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Task Update"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Invoice',
-            href: paths.dashboard.invoice.root,
+            name: 'Task',
+            href: paths.dashboard.task.root,
           },
           { name: currentInvoice?.invoiceNumber },
         ]}

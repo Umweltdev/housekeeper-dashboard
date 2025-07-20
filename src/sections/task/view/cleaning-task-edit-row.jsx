@@ -71,8 +71,9 @@ export default function CleaningTaskTableRow({
           <Label
             variant="soft"
             color={
-              (status === 'completed' && 'success') ||
-              (status === 'pending' && 'warning') ||
+              (status === 'cleaned' && 'success') ||
+              (status === 'dirty' && 'error') ||
+              (status === 'inspected' && 'info') ||
               'default'
             }
           >

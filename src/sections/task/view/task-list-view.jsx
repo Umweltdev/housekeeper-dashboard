@@ -24,7 +24,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useTable, getComparator } from 'src/components/table';
 
-import InvoiceListViewEdit from 'src/sections/invoice/view/invoice-list-viewEdit';
+import InvoiceListViewEdit from 'src/sections/task/view/invoice-list-viewEdit';
 
 import { useGetBookings } from 'src/api/booking';
 
