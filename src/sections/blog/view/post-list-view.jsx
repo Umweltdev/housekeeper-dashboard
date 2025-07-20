@@ -38,8 +38,7 @@ import {
 
 import { useGetBookings } from 'src/api/booking';
 
-
-import UserTableFiltersResult from 'src/sections/user/user-table-filters-result';
+import UserTableFiltersResult from 'src/sections/task/user-table-filters-result';
 import PostTableToolbar from '../post-table-toolbar';
 import UserTableRow from '../post-table-row';
 // ----------------------------------------------------------------------
@@ -203,11 +202,7 @@ export default function UserListView() {
         />
 
         <Card>
-          <PostTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-            roleOptions={_roles}
-          />
+          <PostTableToolbar filters={filters} onFilters={handleFilters} roleOptions={_roles} />
 
           {canReset && (
             <UserTableFiltersResult
@@ -351,8 +346,8 @@ function applyFilter({ inputData, comparator, filters }) {
   filteredData = filteredData.filter((booking) => booking.status === 'checkedOut');
 
   if (name) {
-    filteredData = filteredData.filter(
-      (booking) => booking.customer.name.toLowerCase().includes(name.toLowerCase())
+    filteredData = filteredData.filter((booking) =>
+      booking.customer.name.toLowerCase().includes(name.toLowerCase())
     );
   }
 
@@ -364,10 +359,7 @@ function applyFilter({ inputData, comparator, filters }) {
   if (startDate && endDate) {
     filteredData = filteredData.filter((booking) => {
       const bookingDate = new Date(booking.createdAt);
-      return (
-        bookingDate >= new Date(startDate) && 
-        bookingDate <= new Date(endDate)
-      );
+      return bookingDate >= new Date(startDate) && bookingDate <= new Date(endDate);
     });
   } else if (startDate) {
     filteredData = filteredData.filter((booking) => {

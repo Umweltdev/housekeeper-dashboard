@@ -198,7 +198,7 @@ export default function OverviewAnalyticsView() {
           >
             Guest Check-In Analytics
           </Typography>
-          <Button component={Link} to="/dashboard/user/list" variant="contained">
+          <Button component={Link} to="/dashboard/task/list" variant="contained">
             Guest Check-In Page
           </Button>
         </Grid>

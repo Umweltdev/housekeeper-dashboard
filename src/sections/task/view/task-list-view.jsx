@@ -17,23 +17,18 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import {
-  useTable,
-  getComparator,
-} from 'src/components/table';
+import { useTable, getComparator } from 'src/components/table';
 
-import InvoiceListViewEdit from 'src/sections/invoice/view/invoice-list-viewEdit';
+import InvoiceListViewEdit from 'src/sections/task/view/invoice-list-viewEdit';
 
 import { useGetBookings } from 'src/api/booking';
 
 import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
-
 
 // ----------------------------------------------------------------------
 
