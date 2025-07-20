@@ -1,21 +1,42 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
+
 import {
   Box,
-  TextField,
-  Typography,
+  Grid,
+  Paper,
+  Stack,
   Button,
   Divider,
-  Paper,
+  TextField,
+  Typography,
   IconButton,
-  Grid,
-  Stack,
+  MenuItem,
+  Chip,
 } from '@mui/material';
-import { useState } from 'react';
+
 import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
+
+const STATUS_OPTIONS = ['dirty', 'cleaned']; // Only allow switching between these
+const STATUS_COLORS = {
+  dirty: 'error',
+  cleaned: 'success',
+  inspected: 'info',
+};
+
+const PRIORITY_COLORS = {
+  High: 'error',
+  Medium: 'warning',
+  Low: 'default',
+};
 
 export default function CleaningTaskEditForm({ task }) {
   const [issues, setIssues] = useState(task.maintenanceAndDamages || []);
   const [newIssue, setNewIssue] = useState('');
+  const [status, setStatus] = useState(task.status);
+
+  const isStatusEditable = status === 'dirty' || status === 'cleaned';
 
   const handleAddIssue = () => {
     if (newIssue.trim()) {
@@ -33,20 +54,35 @@ export default function CleaningTaskEditForm({ task }) {
       <Grid container spacing={3}>
         {/* Room Status Edit */}
         <Grid item xs={12} md={6}>
-          <Paper variant="outlined" sx={{ p: 3, height: '100%' }}>
-            <Typography variant="h6" gutterBottom>
-              Room Status Edit
-            </Typography>
+          <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+            <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
+              <Typography variant="h6" component="h2">
+                Room #{task.room}
+              </Typography>
+
+              <Label
+                variant="soft"
+                color={STATUS_COLORS[task.status] || 'default'}
+                sx={{ textTransform: 'capitalize' }}
+              >
+                {task.status}
+              </Label>
+
+              <Label
+                variant="soft"
+                color={PRIORITY_COLORS[task.priority] || 'default'}
+                sx={{ textTransform: 'capitalize' }}
+              >
+                {task.priority} Priority
+              </Label>
+            </Stack>
 
             <Divider sx={{ mb: 2 }} />
 
             <Stack spacing={2}>
-              <TextField
-                label={`Room #${task.room} - ${task.category}`}
-                value={task.status}
-                fullWidth
-                disabled
-              />
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                Room #{task.room} - {task.category}
+              </Typography>
 
               <TextField
                 label="Room Category"
@@ -72,26 +108,55 @@ export default function CleaningTaskEditForm({ task }) {
                 InputProps={{ readOnly: true }}
               />
 
-              <TextField
-                label="Priority"
-                value={task.priority}
-                fullWidth
-                InputProps={{ readOnly: true }}
-              />
+              {/* Priority with Label */}
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <TextField
+                  label="Priority"
+                  value={task.priority}
+                  fullWidth
+                  InputProps={{ readOnly: true }}
+                />
+                <Chip
+                  label={task.priority}
+                  color={PRIORITY_COLORS[task.priority]}
+                  size="small"
+                  variant="soft"
+                />
+              </Stack>
 
-              <TextField
-                label="Cleaning Status"
-                value={task.status}
-                fullWidth
-                InputProps={{ readOnly: true }}
-              />
+              {/* Cleaning Status with logic */}
+              {isStatusEditable ? (
+                <TextField
+                  label="Cleaning Status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  select
+                  fullWidth
+                >
+                  {STATUS_OPTIONS.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              ) : (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <TextField
+                    label="Cleaning Status"
+                    value={status}
+                    fullWidth
+                    InputProps={{ readOnly: true }}
+                  />
+                  <Chip label={status} color={STATUS_COLORS[status]} size="small" variant="soft" />
+                </Stack>
+              )}
             </Stack>
           </Paper>
         </Grid>
 
         {/* Maintenance & Damages */}
         <Grid item xs={12} md={6}>
-          <Paper variant="outlined" sx={{ p: 3, height: '100%' }}>
+          <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
             <Typography variant="h6" gutterBottom>
               Maintenance & Damages
             </Typography>
@@ -144,7 +209,7 @@ export default function CleaningTaskEditForm({ task }) {
         <Button variant="outlined" color="inherit">
           Cancel
         </Button>
-        <Button variant="contained" color="success">
+        <Button variant="contained" color="primary">
           Save Changes
         </Button>
       </Box>

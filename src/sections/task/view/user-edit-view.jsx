@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { CLEANING_TASKS } from './cleaning-tasks';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useGetUser } from 'src/api/user';
 import { useGetBooking } from 'src/api/booking';
+import { CLEANING_TASKS } from './cleaning-tasks';
 
 import CleaningTaskEditForm from './cleaning-task-edit-view';
 // import { get } from 'lodash';
@@ -48,10 +48,10 @@ export default function TaskEditView({ id }) {
             href: paths.dashboard.root,
           },
           {
-            name: 'Task',
+            name: 'Task Edit',
             href: paths.dashboard.task.root,
           },
-          { name: 'Task List' },
+          { name: 'Task Update' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
