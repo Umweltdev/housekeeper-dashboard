@@ -15,7 +15,7 @@ import UserNewEditForm from '../user-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserEditView({ id }) {
+export default function TaskEditView({ id }) {
   const settings = useSettingsContext();
   const { booking } = useGetBooking(id);
   const { user } = useGetUser(id);
@@ -39,17 +39,17 @@ export default function UserEditView({ id }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Task Update"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Booking',
-            href: paths.dashboard.booking.root,
+            name: 'Task',
+            href: paths.dashboard.task.root,
           },
-          { name: booking?.customer?.firstName },
+          { name: 'Task List' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
@@ -61,6 +61,6 @@ export default function UserEditView({ id }) {
   );
 }
 
-UserEditView.propTypes = {
+TaskEditView.propTypes = {
   id: PropTypes.string,
 };
