@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserCardsView } from 'src/sections/user/view';
+import { UserListView } from 'src/sections/task/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserCardsPage() {
+export default function UserListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: User Cards</title>
+        <title> Dashboard: Task List</title>
       </Helmet>
 
-      <UserCardsView />
+      <UserListView />
     </>
   );
 }

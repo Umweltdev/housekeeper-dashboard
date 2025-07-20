@@ -31,11 +31,11 @@ const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 // USER
 // const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 // const UserCardsPage = lazy(() => import('src/pages/dashboard/user/cards'));
-const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
-const UserDetailsPage = lazy(() => import('src/pages/dashboard/user/details'));
+const UserListPage = lazy(() => import('src/pages/dashboard/task/list'));
+const UserDetailsPage = lazy(() => import('src/pages/dashboard/task/details'));
 // const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
-const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
+const UserCreatePage = lazy(() => import('src/pages/dashboard/task/new'));
+const UserEditPage = lazy(() => import('src/pages/dashboard/task/edit'));
 // BLOG
 const BlogPostsPage = lazy(() => import('src/pages/dashboard/post/list'));
 const BlogPostPage = lazy(() => import('src/pages/dashboard/post/details'));
@@ -85,7 +85,7 @@ export const dashboardRoutes = [
       { path: 'booking', element: <OverviewBookingPage /> },
       // { path: 'file', element: <OverviewFilePage /> },
       {
-        path: 'user',
+        path: 'task',
         children: [
           { element: <UserListPage />, index: true },
           // { path: 'profile', element: <UserProfilePage /> },
