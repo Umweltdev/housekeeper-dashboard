@@ -48,7 +48,7 @@ export default function TaskEditView({ id }) {
             href: paths.dashboard.root,
           },
           {
-            name: 'Task Edit',
+            name: 'Task List',
             href: paths.dashboard.task.root,
           },
           { name: 'Task Update' },

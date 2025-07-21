@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
@@ -24,14 +25,33 @@ export default function CleaningTaskTableRow({
   row,
   selected,
   onSelectRow,
-  onViewRow,
   onEditRow,
   onDeleteRow,
 }) {
-  const { room, category, description, dueDate, priority, status, createDate } = row;
+  const { room, category, description, dueDate, priority, status } = row;
 
   const confirm = useBoolean();
   const popover = usePopover();
+
+  const [markingCleaned, setMarkingCleaned] = useState(false);
+
+  const canMarkAsCleaned = status === 'dirty';
+
+  const handleMarkAsCleaned = async () => {
+    setMarkingCleaned(true);
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Trigger update event to parent
+    if (typeof window !== 'undefined') {
+      const event = new CustomEvent('taskStatusUpdated', { detail: row.id });
+      window.dispatchEvent(event);
+    }
+
+    setMarkingCleaned(false);
+    popover.onClose();
+  };
 
   return (
     <>
@@ -92,18 +112,45 @@ export default function CleaningTaskTableRow({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 160 }}
+        sx={{ width: 200 }}
       >
-        <MenuItem
-          onClick={() => {
-            onViewRow();
-            popover.onClose();
-          }}
+        {/* Mark as Cleaned with highlight */}
+        <Tooltip
+          title={
+            canMarkAsCleaned
+              ? ''
+              : status === 'cleaned'
+                ? 'Already cleaned'
+                : 'Cannot mark this task as cleaned'
+          }
         >
-          <Iconify icon="solar:eye-bold" />
-          View
-        </MenuItem>
+          <span>
+            <MenuItem
+              disabled={markingCleaned || !canMarkAsCleaned || status === 'cleaned'}
+              onClick={handleMarkAsCleaned}
+              sx={{
+                bgcolor: 'success.main',
+                color: 'common.white',
+                borderRadius: 1,
+                my: 1,
+                fontWeight: 'bold',
+                '&:hover': {
+                  bgcolor: 'success.dark',
+                },
+                opacity: !canMarkAsCleaned || status === 'cleaned' ? 0.5 : 1,
+              }}
+            >
+              {markingCleaned ? (
+                <Iconify icon="eos-icons:loading" width={20} />
+              ) : (
+                <Iconify icon="ic:round-check-circle" />
+              )}
+              Mark as Cleaned
+            </MenuItem>
+          </span>
+        </Tooltip>
 
+        {/* Edit Option */}
         <MenuItem
           onClick={() => {
             onEditRow();
@@ -114,20 +161,19 @@ export default function CleaningTaskTableRow({
           Edit
         </MenuItem>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
+        {/* Delete Option */}
         <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
           }}
-          sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>
       </CustomPopover>
 
+      {/* Confirm Delete Dialog */}
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
@@ -154,7 +200,6 @@ CleaningTaskTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
-  onViewRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };
