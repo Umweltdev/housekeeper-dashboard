@@ -162,7 +162,7 @@ export default function CleaningTaskTableRow({
         </MenuItem>
 
         {/* Delete Option */}
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -170,7 +170,7 @@ export default function CleaningTaskTableRow({
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
 
       {/* Confirm Delete Dialog */}
