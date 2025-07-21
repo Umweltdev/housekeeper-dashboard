@@ -9,17 +9,19 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useGetUser } from 'src/api/user';
 import { useGetBooking } from 'src/api/booking';
+import { CLEANING_TASKS } from './cleaning-tasks';
 
-import UserNewEditForm from '../user-new-edit-form';
+import CleaningTaskEditForm from './cleaning-task-edit-view';
 // import { get } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-export default function UserEditView({ id }) {
+export default function TaskEditView({ id }) {
   const settings = useSettingsContext();
   const { booking } = useGetBooking(id);
   const { user } = useGetUser(id);
 
+  const task = CLEANING_TASKS.find((t) => t.id.toString() === id);
   console.log(booking);
 
   // const getUserDetails = async (userId) => {
@@ -39,28 +41,29 @@ export default function UserEditView({ id }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Task Update"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Booking',
-            href: paths.dashboard.booking.root,
+            name: 'Task List',
+            href: paths.dashboard.task.root,
           },
-          { name: booking?.customer?.firstName },
+          { name: 'Task Update' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <UserNewEditForm currentUser={booking} />
+      {/* <UserNewEditForm currentUser={booking} /> */}
+      <CleaningTaskEditForm task={task} />
     </Container>
   );
 }
 
-UserEditView.propTypes = {
+TaskEditView.propTypes = {
   id: PropTypes.string,
 };

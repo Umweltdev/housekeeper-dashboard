@@ -33,7 +33,7 @@ import FormProvider, { RHFTextField, RHFUploadAvatar } from 'src/components/hook
 import CheckoutPage from './CheckoutPage';
 import makeToast from '../tour/assets/toaster';
 
-export default function UserNewEditForm({ currentUser }) {
+export default function UserNewEditFormSample({ currentUser }) {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [openCheckoutModal, setOpenCheckoutModal] = useState(false);
@@ -219,7 +219,7 @@ export default function UserNewEditForm({ currentUser }) {
         <Grid xs={12} md={6}>
           <Card sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Customer Informatio n
+              Customer Information
             </Typography>
             <Divider sx={{ mb: 3 }} />
 
@@ -367,7 +367,7 @@ export default function UserNewEditForm({ currentUser }) {
               onClick={handleOpenCheckoutModal}
               startIcon={<Iconify icon="eva:checkmark-circle-2-outline" />}
             >
-              Check-In Guest
+              Check-In Gues t
             </LoadingButton>
           </Card>
         </Grid>
@@ -391,6 +391,6 @@ export default function UserNewEditForm({ currentUser }) {
   );
 }
 
-UserNewEditForm.propTypes = {
+UserNewEditFormSample.propTypes = {
   currentUser: PropTypes.object,
 };
