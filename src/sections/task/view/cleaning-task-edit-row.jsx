@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -52,6 +52,12 @@ export default function CleaningTaskTableRow({
     setMarkingCleaned(false);
     popover.onClose();
   };
+
+  const tooltipTitle = (() => {
+    if (canMarkAsCleaned) return '';
+    if (status === 'cleaned') return 'Already cleaned';
+    return 'Cannot mark this task as cleaned';
+  })();
 
   return (
     <>
@@ -115,15 +121,7 @@ export default function CleaningTaskTableRow({
         sx={{ width: 200 }}
       >
         {/* Mark as Cleaned with highlight */}
-        <Tooltip
-          title={
-            canMarkAsCleaned
-              ? ''
-              : status === 'cleaned'
-                ? 'Already cleaned'
-                : 'Cannot mark this task as cleaned'
-          }
-        >
+        <Tooltip title={tooltipTitle}>
           <span>
             <MenuItem
               disabled={markingCleaned || !canMarkAsCleaned || status === 'cleaned'}
