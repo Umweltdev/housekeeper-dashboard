@@ -1,9 +1,8 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import PropTypes from 'prop-types';
-
-import { Card, Stack, Typography, TextField, MenuItem, Button, Divider, Box } from '@mui/material';
+import { Box, Card, Stack, Button, Divider, MenuItem, TextField, Typography } from '@mui/material';
 
 const statusOptions = ['pending', 'completed', 'cancelled'];
 const priorityOptions = ['Low', 'Medium', 'High'];
