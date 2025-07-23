@@ -123,14 +123,11 @@ export function useNavData() {
             title: t('my task'),
             path: paths.dashboard.user.list,
             icon: ICONS.blog,
-            // children: [
-            //   // { title: t('profile'), path: paths.dashboard.user.root },
-            //   // { title: t('cards'), path: paths.dashboard.user.cards },
-            //   { title: t('list'), path: paths.dashboard.user.list },
-            //   // { title: t('create'), path: paths.dashboard.user.new },
-            //   // { title: t('edit'), path: paths.dashboard.user.demo.edit },
-            //   // { title: t('account'), path: paths.dashboard.user.account },
-            // ],
+          },
+          {
+            title: t('Inventory'),
+            path: paths.dashboard.inventory.root,
+            icon: ICONS.ecommerce,
           },
 
           // ORDER

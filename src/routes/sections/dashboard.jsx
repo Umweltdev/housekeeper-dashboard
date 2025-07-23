@@ -33,9 +33,13 @@ const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 // const UserCardsPage = lazy(() => import('src/pages/dashboard/user/cards'));
 const UserListPage = lazy(() => import('src/pages/dashboard/task/list'));
 const UserDetailsPage = lazy(() => import('src/pages/dashboard/task/details'));
+
 // const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/task/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/task/edit'));
+
+const InventoryListPage = lazy(() => import('src/pages/dashboard/inventory/list'));
+const InventoryDetailsPage = lazy(() => import('src/pages/dashboard/inventory/details'));
 // BLOG
 const BlogPostsPage = lazy(() => import('src/pages/dashboard/post/list'));
 const BlogPostPage = lazy(() => import('src/pages/dashboard/post/details'));
@@ -97,6 +101,20 @@ export const dashboardRoutes = [
           // { path: 'account', element: <UserAccountPage /> },
         ],
       },
+      {
+        path: 'inventory',
+        children: [
+          { element: <InventoryListPage />, index: true },
+          // { path: 'profile', element: <UserProfilePage /> },
+          // { path: 'cards', element: <UserCardsPage /> },
+          { path: 'list', element: <UserListPage /> },
+
+          { path: ':id', element: <InventoryDetailsPage /> },
+          { path: ':id/edit', element: <InventoryDetailsPage /> },
+          // { path: 'account', element: <UserAccountPage /> },
+        ],
+      },
+
       {
         path: 'event',
         children: [
