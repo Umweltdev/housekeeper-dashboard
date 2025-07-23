@@ -45,14 +45,13 @@ import CleaningTaskTableRow from './cleaning-task-edit-row';
 import InvoiceTableFiltersResult from './invoice-table-filters-result';
 
 // ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'room', label: 'Room' },
-  { id: 'category', label: 'Room Category' },
-  { id: 'description', label: 'Task Description' },
-  { id: 'dueDate', label: 'Due Date' },
-  { id: 'priority', label: 'Priority' },
-  { id: 'status', label: 'Cleaning Status' },
+  { id: 'itemName', label: 'Item Name' },
+  { id: 'requestDate', label: 'Request Date' },
+  { id: 'quantity', label: 'Quantity' },
+  { id: 'status', label: 'Status' },
   { id: '', label: '' },
 ];
 
@@ -92,12 +91,6 @@ export default function InvoiceListViewEdit() {
     setTableData(sortedInvoices);
   }, [invoices]);
 
-  // I just want to get cancelled invoices here
-  const cancelledInvoices = invoices
-    .filter((invoice) => invoice.status === 'cancelled')
-    .sort((a, b) => new Date(b.createDate) - new Date(a.createDate));
-  // console.log(cancelledInvoices);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError = isAfter(filters.startDate, filters.endDate);
@@ -133,25 +126,30 @@ export default function InvoiceListViewEdit() {
     );
 
   const TABS = [
-    { value: 'all', label: 'All Tasks', color: 'default', count: tableData.length },
+    { value: 'all', label: 'All Items', color: 'default', count: tableData.length },
     {
-      value: 'cleaned',
-      label: 'Cleaned',
+      value: 'Approved',
+      label: 'Approved',
       color: 'success',
-      count: getInvoiceLength('cleaned'),
-    },
-
-    {
-      value: 'inspected',
-      label: 'Inspected',
-      color: 'info',
-      count: getInvoiceLength('inspected'),
+      count: getInvoiceLength('Approved'),
     },
     {
-      value: 'dirty',
-      label: 'Dirty',
+      value: 'Requested',
+      label: 'Requested',
+      color: 'warning',
+      count: getInvoiceLength('Requested'),
+    },
+    {
+      value: 'Rejected',
+      label: 'Rejected',
       color: 'error',
-      count: getInvoiceLength('dirty'),
+      count: getInvoiceLength('Rejected'),
+    },
+    {
+      value: 'Received',
+      label: 'Received',
+      color: 'info',
+      count: getInvoiceLength('Received'),
     },
   ];
 
@@ -194,14 +192,14 @@ export default function InvoiceListViewEdit() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.task.edit(id));
+      router.push(paths.dashboard.inventory.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.invoice.details(id));
+      router.push(paths.dashboard.inventory.details(id));
     },
     [router]
   );
@@ -215,7 +213,6 @@ export default function InvoiceListViewEdit() {
 
   return (
     <>
-      {/* <Container maxWidth={settings.themeStretch ? false : 'lg'}> */}
       <Card>
         <Tabs
           value={filters.status}
@@ -362,7 +359,6 @@ export default function InvoiceListViewEdit() {
           onChangeDense={table.onChangeDense}
         />
       </Card>
-      {/* </Container> */}
 
       <ConfirmDialog
         open={confirm.value}
@@ -407,18 +403,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (invoice) =>
-        invoice?.invoiceNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        invoice?.invoiceTo?.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (invoice) => invoice?.itemName.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    if (status === 'high') {
-      inputData = inputData.filter((task) => task.priority === 'High');
-    } else {
-      inputData = inputData.filter((task) => task.status === status);
-    }
+    inputData = inputData.filter((invoice) => invoice.status === status);
   }
 
   if (service.length) {

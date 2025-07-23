@@ -28,36 +28,10 @@ export default function CleaningTaskTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const { room, category, description, dueDate, priority, status } = row;
+  const { itemName, requestDate, quantity, status } = row;
 
   const confirm = useBoolean();
   const popover = usePopover();
-
-  const [markingCleaned, setMarkingCleaned] = useState(false);
-
-  const canMarkAsCleaned = status === 'dirty';
-
-  const handleMarkAsCleaned = async () => {
-    setMarkingCleaned(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Trigger update event to parent
-    if (typeof window !== 'undefined') {
-      const event = new CustomEvent('taskStatusUpdated', { detail: row.id });
-      window.dispatchEvent(event);
-    }
-
-    setMarkingCleaned(false);
-    popover.onClose();
-  };
-
-  const tooltipTitle = (() => {
-    if (canMarkAsCleaned) return '';
-    if (status === 'cleaned') return 'Already cleaned';
-    return 'Cannot mark this task as cleaned';
-  })();
 
   return (
     <>
@@ -66,40 +40,19 @@ export default function CleaningTaskTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>{room}</TableCell>
-        <TableCell>{category}</TableCell>
-        <TableCell>{description}</TableCell>
-
+        <TableCell>{itemName}</TableCell>
         <TableCell>
-          <Typography variant="body2">{fDate(dueDate)}</Typography>
-          <Typography variant="caption" color="text.secondary">
-            {fTime(dueDate)}
-          </Typography>
+          <Typography variant="body2">{fDate(requestDate)}</Typography>
         </TableCell>
-
-        <TableCell>
-          <Typography
-            variant="body2"
-            sx={{
-              color:
-                (priority === 'High' && 'error.main') ||
-                (priority === 'Medium' && 'warning.main') ||
-                (priority === 'Low' && 'success.main') ||
-                'text.primary',
-              fontWeight: 600,
-            }}
-          >
-            {priority}
-          </Typography>
-        </TableCell>
-
+        <TableCell>{quantity}</TableCell>
         <TableCell>
           <Label
             variant="soft"
             color={
-              (status === 'cleaned' && 'success') ||
-              (status === 'dirty' && 'error') ||
-              (status === 'inspected' && 'info') ||
+              (status === 'Approved' && 'success') ||
+              (status === 'Requested' && 'warning') ||
+              (status === 'Rejected' && 'error') ||
+              (status === 'Received' && 'info') ||
               'default'
             }
           >
@@ -120,35 +73,6 @@ export default function CleaningTaskTableRow({
         arrow="right-top"
         sx={{ width: 200 }}
       >
-        {/* Mark as Cleaned with highlight */}
-        <Tooltip title={tooltipTitle}>
-          <span>
-            <MenuItem
-              disabled={markingCleaned || !canMarkAsCleaned || status === 'cleaned'}
-              onClick={handleMarkAsCleaned}
-              sx={{
-                bgcolor: 'success.main',
-                color: 'common.white',
-                borderRadius: 1,
-                my: 1,
-                fontWeight: 'bold',
-                '&:hover': {
-                  bgcolor: 'success.dark',
-                },
-                opacity: !canMarkAsCleaned || status === 'cleaned' ? 0.5 : 1,
-              }}
-            >
-              {markingCleaned ? (
-                <Iconify icon="eos-icons:loading" width={20} />
-              ) : (
-                <Iconify icon="ic:round-check-circle" />
-              )}
-              Mark as Cleaned
-            </MenuItem>
-          </span>
-        </Tooltip>
-
-        {/* Edit Option */}
         <MenuItem
           onClick={() => {
             onEditRow();
@@ -158,9 +82,7 @@ export default function CleaningTaskTableRow({
           <Iconify icon="solar:pen-bold" />
           Edit
         </MenuItem>
-
-        {/* Delete Option */}
-        {/* <MenuItem
+        <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -168,10 +90,9 @@ export default function CleaningTaskTableRow({
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
-        </MenuItem> */}
+        </MenuItem>
       </CustomPopover>
 
-      {/* Confirm Delete Dialog */}
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}

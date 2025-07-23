@@ -1,5 +1,3 @@
-// item-requests.js
-
 export const ITEM_REQUESTS = [
   {
     id: '1',

@@ -133,7 +133,7 @@ export const paths = {
       details: (id) => `${ROOTS.DASHBOARD}/inventory/${id}`,
 
       demo: {
-        details: `${ROOTS.DASHBOARD}/order/${MOCK_ID}`,
+        details: `${ROOTS.DASHBOARD}/inventory/${MOCK_ID}`,
       },
     },
     task: {
