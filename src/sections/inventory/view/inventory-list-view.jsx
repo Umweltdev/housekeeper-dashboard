@@ -4,13 +4,20 @@ import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
+import Card from '@mui/material/Card';
 
+import Iconify from 'src/components/iconify';
+import { Typography } from '@mui/material';
+
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Divider from '@mui/material/Divider';
+
 import axiosInstance from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -21,14 +28,15 @@ import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
+import Scrollbar from 'src/components/scrollbar';
 import { useTable, getComparator } from 'src/components/table';
-
-import InvoiceListViewEdit from 'src/sections/task/view/invoice-list-viewEdit';
 
 import { useGetBookings } from 'src/api/booking';
 
 import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
+import InvoiceListViewEdit from './invoice-list-viewEdit';
+import InvoiceAnalytic from '../invoice-analytic';
+import { CLEANING_TASKS } from './cleaning-tasks';
 
 // ----------------------------------------------------------------------
 
@@ -273,95 +281,80 @@ export default function InventoryListView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Inventory"
-          links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            // { name: 'Check-In', href: paths.dashboard.booking.root },
-            { name: 'List' },
-          ]}
+        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{}}>
+          <CustomBreadcrumbs
+            heading="Inventory"
+            links={[
+              { name: 'Dashboard', href: paths.dashboard.root },
+              // { name: 'Check-In', href: paths.dashboard.booking.root },
+              { name: 'List' },
+            ]}
+            sx={{
+              mb: { xs: 3, md: 5 },
+            }}
+          />
+          {/* <Divider /> */}
+          {/* <Card
           sx={{
             mb: { xs: 3, md: 5 },
           }}
-        />
-        {/* <Divider /> */}
-        <Box
+        > */}
+
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Iconify icon="material-symbols:add-box" />}
+            onClick={() => router.push('/dashboard/inventory/request')}
+          >
+            Request Inventory
+          </Button>
+        </Stack>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
+          // sx={{ py: 2 ,mb: 6 }}
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            rowGap: 4,
-            columnGap: 3,
-            justifyContent: 'center',
-            alignItems: 'stretch',
-            flexWrap: 'wrap',
-            mb: 4,
+            mb: { xs: 3, md: 5 },
           }}
+          gap={2}
         >
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Total Task"
-              icon="bi:list-task"
-              iconColor="info.main"
-              total={23}
-              chart={{
-                colors: [theme.palette.success.light, theme.palette.success.main],
-                series: [3, 5, 2, 4, 6, 2, 1, 1, 0],
-              }}
-            />
-          </Box>
+          <InvoiceAnalytic
+            title="Requested"
+            total={10}
+            percent={25}
+            price={0}
+            icon="tdesign:task"
+            color={theme.palette.info.main}
+          />
 
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="High Priority"
-              icon="iconoir:priority-high-solid"
-              iconColor="error.main"
-              total={12}
-              chart={{
-                colors: [theme.palette.success.light, theme.palette.success.main],
-                series: [3, 5, 2, 4, 6, 2, 1],
-              }}
-            />
-          </Box>
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="In Progress"
-              total={18}
-              percent={+8}
-              icon="grommet-icons:in-progress"
-              iconColor="warning.main"
-              chart={{
-                colors: [theme.palette.warning.light, theme.palette.warning.main],
-                series: [4, 2, 6, 8, 5],
-              }}
-            />
-          </Box>
+          <InvoiceAnalytic
+            title="Approved"
+            total={50}
+            percent={50}
+            price={0}
+            icon="ic:round-check-circle"
+            color={theme.palette.success.main}
+          />
 
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Completed Tasks"
-              iconColor="success.main"
-              total={4}
-              percent={+12}
-              icon="solar:check-circle-bold-duotone"
-              chart={{
-                colors: [theme.palette.success.light, theme.palette.success.main],
-                series: [1, 2, 3, 4, 5],
-              }}
-            />
-          </Box>
+          <InvoiceAnalytic
+            title="Rejected"
+            total={5}
+            percent={15}
+            price={0}
+            icon="material-symbols:cancel"
+            color={theme.palette.error.main}
+          />
 
-          {/* <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Check-in per hour"
-              percent={-5.1}
-              total={averageCheckInsPerHour}
-              chart={{
-                colors: [theme.palette.warning.light, theme.palette.warning.main],
-                series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-              }}
-            />
-          </Box> */}
-        </Box>
+          <InvoiceAnalytic
+            title="Received"
+            total={6}
+            percent={10}
+            price={0}
+            icon="ph:package-bold"
+            color={theme.palette.warning.main}
+          />
+        </Stack>
+        {/* </Card> */}
         <InvoiceListViewEdit />
       </Container>
 

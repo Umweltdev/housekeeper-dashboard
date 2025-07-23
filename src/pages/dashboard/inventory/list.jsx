@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserListView } from 'src/sections/inventory/view';
+import { InventoryListView } from 'src/sections/inventory/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function UserListPage() {
         <title> Dashboard: Inventory List</title>
       </Helmet>
 
-      <UserListView />
+      <InventoryListView />
     </>
   );
 }

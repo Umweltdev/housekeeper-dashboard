@@ -9,7 +9,7 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useGetUser } from 'src/api/user';
 import { useGetBooking } from 'src/api/booking';
-import { CLEANING_TASKS } from './cleaning-tasks';
+import { CLEANING_TASKS } from './cleaning-tasks.js';
 
 import CleaningTaskEditForm from './cleaning-task-edit-view';
 // import { get } from 'lodash';

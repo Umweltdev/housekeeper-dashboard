@@ -131,26 +131,26 @@ export function useNavData() {
           },
 
           // ORDER
-          {
-            title: t('Guest Check-out'),
-            path: paths.dashboard.order.root,
-            icon: ICONS.order,
-            children: [
-              { title: t('list'), path: paths.dashboard.order.root },
+          // {
+          //   title: t('Guest Check-out'),
+          //   path: paths.dashboard.order.root,
+          //   icon: ICONS.order,
+          //   children: [
+          //     { title: t('list'), path: paths.dashboard.order.root },
 
-              //     // { title: t('details'), path: paths.dashboard.order.demo.details },
-            ],
-          },
+          //     //     // { title: t('details'), path: paths.dashboard.order.demo.details },
+          //   ],
+          // },
 
           // deploy
 
           // PRODUCT
-          {
-            title: t('Complaints'),
-            path: paths.dashboard.event.root,
-            icon: ICONS.ecommerce,
-            children: [{ title: t('list'), path: paths.dashboard.event.new }],
-          },
+          // {
+          //   title: t('Complaints'),
+          //   path: paths.dashboard.event.root,
+          //   icon: ICONS.ecommerce,
+          //   children: [{ title: t('list'), path: paths.dashboard.event.new }],
+          // },
 
           // INVOICE
           {
