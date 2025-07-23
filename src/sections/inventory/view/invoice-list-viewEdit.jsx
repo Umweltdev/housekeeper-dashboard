@@ -52,7 +52,7 @@ const TABLE_HEAD = [
   { id: 'requestDate', label: 'Request Date' },
   { id: 'quantity', label: 'Quantity' },
   { id: 'status', label: 'Status' },
-  { id: '', label: '' },
+  { id: '', label: 'Action' },
 ];
 
 const defaultFilters = {

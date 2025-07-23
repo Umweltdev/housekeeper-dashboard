@@ -8,7 +8,7 @@ export default function UserCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Create a new user</title>
+        <title> Dashboard: Request for Inventory</title>
       </Helmet>
 
       <UserCreateView />

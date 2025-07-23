@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
-import { UserDetailsView } from 'src/sections/task/view';
+import { UserDetailsView } from 'src/sections/inventory/view';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ export default function InvoiceDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: User Details</title>
+        <title> Dashboard: New Inventory</title>
       </Helmet>
 
       <UserDetailsView id={`${id}`} />

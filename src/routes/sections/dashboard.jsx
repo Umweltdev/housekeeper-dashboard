@@ -140,7 +140,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <InvoiceListPage /> },
           { path: ':id', element: <InvoiceDetailsPage /> },
           { path: ':id/edit', element: <InvoiceEditPage /> },
-          { path: 'new', element: <InvoiceCreatePage /> },
+          { path: 'new', element: <UserListPage /> },
         ],
       },
       {

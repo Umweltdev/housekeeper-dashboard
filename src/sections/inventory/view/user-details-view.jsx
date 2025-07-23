@@ -66,8 +66,8 @@ export default function UserDetailsView({ id }) {
             href: paths.dashboard.root,
           },
           {
-            name: 'User',
-            href: paths.dashboard.user.root,
+            name: 'Inventory',
+            href: paths.dashboard.inventory.root,
           },
           { name: currentUser?.firstName },
         ]}
