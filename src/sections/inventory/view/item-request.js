@@ -1,0 +1,58 @@
+export const ITEM_REQUESTS = [
+  {
+    id: '1',
+    itemName: 'Bath Towels',
+    requestDate: '2024-12-22',
+    quantity: 50,
+    status: 'Approved',
+  },
+  {
+    id: '2',
+    itemName: 'Shampoo Bottles',
+    requestDate: '2024-12-21',
+    quantity: 200,
+    status: 'Requested',
+  },
+  {
+    id: '3',
+    itemName: 'Light Bulbs',
+    requestDate: '2024-12-20',
+    quantity: 30,
+    status: 'Rejected',
+  },
+  {
+    id: '4',
+    itemName: 'Coffee Pods',
+    requestDate: '2024-12-19',
+    quantity: 150,
+    status: 'Received',
+  },
+  {
+    id: '5',
+    itemName: 'Toilet Paper Rolls',
+    requestDate: '2024-12-18',
+    quantity: 100,
+    status: 'Requested',
+  },
+  {
+    id: '6',
+    itemName: 'Room Slippers',
+    requestDate: '2024-12-17',
+    quantity: 75,
+    status: 'Approved',
+  },
+  {
+    id: '7',
+    itemName: 'Water Bottles',
+    requestDate: '2024-12-16',
+    quantity: 300,
+    status: 'Received',
+  },
+  {
+    id: '8',
+    itemName: 'Laundry Bags',
+    requestDate: '2024-12-15',
+    quantity: 40,
+    status: 'Rejected',
+  },
+];
