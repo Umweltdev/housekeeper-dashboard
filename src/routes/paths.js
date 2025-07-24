@@ -128,6 +128,14 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
       },
     },
+    order: {
+      root: `${ROOTS.DASHBOARD}/inventory`,
+      details: (id) => `${ROOTS.DASHBOARD}/inventory/${id}`,
+
+      demo: {
+        details: `${ROOTS.DASHBOARD}/inventory/${MOCK_ID}`,
+      },
+    },
     task: {
       root: `${ROOTS.DASHBOARD}/task`,
       new: `${ROOTS.DASHBOARD}/task/new`,
@@ -140,6 +148,20 @@ export const paths = {
       demo: {
         details: `${ROOTS.DASHBOARD}/task/${MOCK_ID}`,
         edit: `${ROOTS.DASHBOARD}/task/${MOCK_ID}/edit`,
+      },
+    },
+    inventory: {
+      root: `${ROOTS.DASHBOARD}/inventory`,
+      new: `${ROOTS.DASHBOARD}/inventory/new`,
+      list: `${ROOTS.DASHBOARD}/inventory/list`,
+      cards: `${ROOTS.DASHBOARD}/inventory/cards`,
+      profile: `${ROOTS.DASHBOARD}/inventory/profile`,
+      account: `${ROOTS.DASHBOARD}/inventory/account`,
+      edit: (id) => `${ROOTS.DASHBOARD}/inventory/${id}/edit`,
+      details: (id) => `${ROOTS.DASHBOARD}/inventory/${id}`,
+      demo: {
+        details: `${ROOTS.DASHBOARD}/inventory/${MOCK_ID}`,
+        edit: `${ROOTS.DASHBOARD}/inventory/${MOCK_ID}/edit`,
       },
     },
 
@@ -187,14 +209,7 @@ export const paths = {
         edit: (id) => `${ROOTS.DASHBOARD}/post/${paramCase(id)}/edit`,
       },
     },
-    order: {
-      root: `${ROOTS.DASHBOARD}/order`,
-      details: (id) => `${ROOTS.DASHBOARD}/order/${id}`,
 
-      demo: {
-        details: `${ROOTS.DASHBOARD}/order/${MOCK_ID}`,
-      },
-    },
     job: {
       root: `${ROOTS.DASHBOARD}/job`,
       new: `${ROOTS.DASHBOARD}/job/new`,

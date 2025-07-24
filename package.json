@@ -40,6 +40,7 @@
     "@mui/x-date-pickers": "^6.20.2",
     "@mui/x-date-pickers-pro": "^7.15.0",
     "@react-pdf/renderer": "^3.1.14",
+    "@react-spring/web": "^10.0.1",
     "@supabase/supabase-js": "^2.39.0",
     "@syncfusion/ej2-react-schedule": "^28.2.5",
     "apexcharts": "^3.44.2",
