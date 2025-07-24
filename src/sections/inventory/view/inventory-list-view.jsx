@@ -321,7 +321,7 @@ export default function InventoryListView() {
           <InvoiceAnalytic
             title="Requested"
             total={10}
-            percent={25}
+            percent={5}
             price={0}
             icon="tdesign:task"
             color={theme.palette.info.main}

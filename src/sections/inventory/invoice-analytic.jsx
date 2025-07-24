@@ -14,7 +14,11 @@ export default function InvoiceAnalytic({ title, total, icon, color }) {
       sx={{
         p: 3,
         width: 1,
-        minWidth: 240,
+        minWidth: {
+          xs: 200, // smaller screens
+          md: 180, // reduced width on medium screens
+          lg: 20, // full width on large screens
+        },
         borderRadius: 2.5,
         background: (theme) =>
           `linear-gradient(135deg, ${theme.palette[color]?.main || color} 0%, ${

@@ -17,7 +17,7 @@ export default function InvoiceDetailsPage() {
         <title> Dashboard: New Inventory</title>
       </Helmet>
 
-      <UserDetailsView id={`${id}`} />
+      <UserDetailsView  />
     </>
   );
 }
