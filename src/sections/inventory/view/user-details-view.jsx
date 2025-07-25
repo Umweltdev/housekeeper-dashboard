@@ -24,13 +24,18 @@ import {
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import axiosInstance from 'src/utils/axios';
+
 import { useGetUser } from 'src/api/user';
+
+import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Iconify from 'src/components/iconify';
 
 export default function UserDetailsView({ id }) {
+  const router = useRouter();
   const settings = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const { user: currentUser } = useGetUser(id);
@@ -71,13 +76,15 @@ export default function UserDetailsView({ id }) {
 
   const handleSubmit = async () => {
     try {
-      await axiosInstance.post('/api/inventory/request', {
-        userId: id,
-        ...formData,
-      });
+      // await axiosInstance.post('/api/inventory/request', {
+      //   userId: id,
+      //   ...formData,
+      // });
       enqueueSnackbar('Inventory request submitted successfully', { variant: 'success' });
       handleReset();
       setOpenInventoryDialog(false);
+
+      router.push(paths.dashboard.inventory.root);
     } catch (error) {
       enqueueSnackbar('Failed to submit inventory request', { variant: 'error' });
     }
@@ -308,7 +315,7 @@ export default function UserDetailsView({ id }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenInventoryDialog(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleSubmit} autoFocus>
+          <Button variant="contained" color="primary" onClick={handleSubmit} autoFocus>
             Submit
           </Button>
         </DialogActions>
