@@ -1,7 +1,7 @@
+
 import { paramCase } from 'src/utils/change-case';
 
 import { _id, _postTitles } from 'src/_mock/assets';
-import { Schedule } from '@syncfusion/ej2-react-schedule';
 
 // ----------------------------------------------------------------------
 

@@ -1,15 +1,16 @@
 import React from 'react';
+
 import {
   Box,
   Card,
-  Typography,
+  Stack,
+  Avatar,
   Accordion,
+  Typography,
   AccordionSummary,
   AccordionDetails,
-  Stack,
-  Chip,
-  Avatar,
 } from '@mui/material';
+
 import Iconify from 'src/components/iconify';
 
 export default function TrainingKnowledgeBase() {
@@ -158,7 +159,8 @@ export default function TrainingKnowledgeBase() {
                 <Box component="span" fontWeight="bold">
                   Big no-no:
                 </Box>{' '}
-                Mixing bleach + ammonia = toxic gas (we're not making chemistry experiments here!)
+                Mixing bleach + ammonia = toxic gas (we&apos;re not making chemistry experiments
+                here!)
               </Typography>
             </Box>
           </Card>
@@ -191,7 +193,7 @@ export default function TrainingKnowledgeBase() {
                 <Box component="span" fontWeight="bold">
                   Be prepared:
                 </Box>{' '}
-                Know where the nearest fire extinguisher is (hint: check the app's floor plan)
+                Know where the nearest fire extinguisher is (hint: check the app&apos;s floor plan)
               </Typography>
             </Box>
           </Card>
@@ -229,7 +231,7 @@ export default function TrainingKnowledgeBase() {
                 <Box component="span" fontWeight="bold">
                   Cart rules:
                 </Box>{' '}
-                Push don't pull, and adjust handle height to avoid hunching.
+                Push don&apos;t pull, and adjust handle height to avoid hunching.
               </Typography>
             </Box>
           </Card>

@@ -2,12 +2,9 @@
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
-import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
-import Card from '@mui/material/Card';
 
 import Iconify from 'src/components/iconify';
-import { Typography } from '@mui/material';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -28,15 +25,12 @@ import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Scrollbar from 'src/components/scrollbar';
 import { useTable, getComparator } from 'src/components/table';
 
 import { useGetBookings } from 'src/api/booking';
 
-import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
 import InvoiceListViewEdit from './invoice-list-viewEdit';
 import InvoiceAnalytic from '../invoice-analytic';
-import { CLEANING_TASKS } from './cleaning-tasks';
 
 // ----------------------------------------------------------------------
 

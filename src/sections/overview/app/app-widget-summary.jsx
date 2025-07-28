@@ -169,7 +169,7 @@ export default function AppWidgetSummary({ title, percent, total, chart, sx, ...
                 fontWeight: 600,
               }}
             >
-              {fPercent(Math.abs(percent))} {percent > 0 ? '↑' : percent < 0 ? '↓' : ''}
+              {fPercent(Math.abs(percent))} {percent > 0 && '↑'} {percent < 0 && '↓'}
             </Typography>
           )}
         </Stack>

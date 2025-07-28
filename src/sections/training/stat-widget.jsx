@@ -1,9 +1,11 @@
 // src/sections/training/StatWidget.js
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTheme, alpha } from '@mui/material/styles';
-import { Box, Card, Typography, LinearProgress } from '@mui/material';
+
 import Stack from '@mui/material/Stack';
+import { alpha, useTheme } from '@mui/material/styles';
+import { Box, Card, Typography, LinearProgress } from '@mui/material';
+
 import Iconify from 'src/components/iconify';
 
 export default function StatWidget({ title, value, total, unit, progress, icon, color }) {

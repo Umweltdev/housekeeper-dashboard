@@ -1,11 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTheme, alpha } from '@mui/material/styles';
-import { Box, Card, Typography, Button, Stack, Chip, Divider } from '@mui/material';
+
+import { alpha, useTheme } from '@mui/material/styles';
+import { Box, Card, Chip, Stack, Button, Divider, Typography } from '@mui/material';
+
 import Iconify from 'src/components/iconify';
 
 export default function TrainingModuleCard({ module, onView }) {
   const theme = useTheme();
+
+  // Helper function to get difficulty color
+  const getDifficultyColor = (difficulty) => {
+    if (difficulty === 'Advanced') return theme.palette.error.main;
+    if (difficulty === 'Beginner') return theme.palette.success.main;
+    return theme.palette.warning.main;
+  };
 
   // Map module types to icons
   const getTypeIcon = (type) => {
@@ -79,20 +88,8 @@ export default function TrainingModuleCard({ module, onView }) {
               label={module.difficulty}
               size="small"
               sx={{
-                bgcolor: alpha(
-                  module.difficulty === 'Advanced'
-                    ? theme.palette.error.main
-                    : module.difficulty === 'Beginner'
-                      ? theme.palette.success.main
-                      : theme.palette.warning.main,
-                  0.08
-                ),
-                color:
-                  module.difficulty === 'Advanced'
-                    ? theme.palette.error.main
-                    : module.difficulty === 'Beginner'
-                      ? theme.palette.success.main
-                      : theme.palette.warning.main,
+                bgcolor: alpha(getDifficultyColor(module.difficulty), 0.08),
+                color: getDifficultyColor(module.difficulty),
               }}
             />
           )}
@@ -155,3 +152,4 @@ TrainingModuleCard.propTypes = {
   }).isRequired,
   onView: PropTypes.func.isRequired,
 };
+

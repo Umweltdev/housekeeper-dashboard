@@ -11,7 +11,6 @@ import { useGetUser } from 'src/api/user';
 import { useGetBooking } from 'src/api/booking';
 // import { CLEANING_TASKS } from './training-items';
 
-import CleaningTaskEditForm from './cleaning-task-edit-view';
 // import { get } from 'lodash';
 
 // ----------------------------------------------------------------------
