@@ -1,6 +1,7 @@
 import { paramCase } from 'src/utils/change-case';
 
 import { _id, _postTitles } from 'src/_mock/assets';
+import { Schedule } from '@syncfusion/ej2-react-schedule';
 
 // ----------------------------------------------------------------------
 
@@ -153,16 +154,14 @@ export const paths = {
     inventory: {
       root: `${ROOTS.DASHBOARD}/inventory`,
       new: `${ROOTS.DASHBOARD}/inventory/new`,
-      list: `${ROOTS.DASHBOARD}/inventory/list`,
-      cards: `${ROOTS.DASHBOARD}/inventory/cards`,
-      profile: `${ROOTS.DASHBOARD}/inventory/profile`,
-      account: `${ROOTS.DASHBOARD}/inventory/account`,
-      edit: (id) => `${ROOTS.DASHBOARD}/inventory/${id}/edit`,
-      details: (id) => `${ROOTS.DASHBOARD}/inventory/${id}`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/inventory/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/inventory/${MOCK_ID}/edit`,
-      },
+    },
+    training: {
+      root: `${ROOTS.DASHBOARD}/training`,
+      // new: `${ROOTS.DASHBOARD}/inventory/new`,
+    },
+    schedule: {
+      root: `${ROOTS.DASHBOARD}/schedule`,
+      // new: `${ROOTS.DASHBOARD}/inventory/new`,
     },
 
     booking: {
