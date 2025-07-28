@@ -40,6 +40,10 @@ const UserEditPage = lazy(() => import('src/pages/dashboard/task/edit'));
 
 const InventoryListPage = lazy(() => import('src/pages/dashboard/inventory/list'));
 const InventoryDetailsPage = lazy(() => import('src/pages/dashboard/inventory/details'));
+
+const TrainingListPage = lazy(() => import('src/pages/dashboard/training/list'));
+
+const ScheduleListPage = lazy(() => import('src/pages/dashboard/schedule/list'));
 // BLOG
 const BlogPostsPage = lazy(() => import('src/pages/dashboard/post/list'));
 const BlogPostPage = lazy(() => import('src/pages/dashboard/post/details'));
@@ -114,7 +118,31 @@ export const dashboardRoutes = [
           // { path: 'account', element: <UserAccountPage /> },
         ],
       },
+      {
+        path: 'training',
+        children: [
+          { element: <TrainingListPage />, index: true },
+          // { path: 'profile', element: <UserProfilePage /> },
+          // { path: 'cards', element: <UserCardsPage /> },
 
+          // { path: ':id', element: <InventoryDetailsPage /> },
+          // { path: ':id/edit', element: <InventoryDetailsPage /> },
+          // { path: 'account', element: <UserAccountPage /> },
+        ],
+      },
+
+      {
+        path: 'schedule',
+        children: [
+          { element: <ScheduleListPage />, index: true },
+          // { path: 'profile', element: <UserProfilePage /> },
+          // { path: 'cards', element: <UserCardsPage /> },
+
+          // { path: ':id', element: <InventoryDetailsPage /> },
+          // { path: ':id/edit', element: <InventoryDetailsPage /> },
+          // { path: 'account', element: <UserAccountPage /> },
+        ],
+      },
       {
         path: 'event',
         children: [
