@@ -39,7 +39,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { CLEANING_TASKS } from './training-items';
+import { CLEANING_TASKS } from '../training-items';
 import InvoiceTableToolbar from './invoice-table-toolbar';
 import CleaningTaskTableRow from './cleaning-task-edit-row';
 import InvoiceTableFiltersResult from './invoice-table-filters-result';
