@@ -285,83 +285,67 @@ export default function UserListView() {
           }}
         />
         {/* <Divider /> */}
+
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'row',
-            rowGap: 4,
-            columnGap: 3,
+            flexWrap: 'wrap',
             justifyContent: 'center',
             alignItems: 'stretch',
-            flexWrap: 'wrap',
+            gap: { xs: 1, md: 2 },
             mb: 4,
           }}
         >
-          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Total Task"
-              icon="bi:list-task"
-              iconColor="info.main"
-              total={23}
-              chart={{
+          {[
+            {
+              title: 'Total Task',
+              icon: 'bi:list-task',
+              iconColor: 'info.main',
+              total: 23,
+              chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [3, 5, 2, 4, 6, 2, 1, 1, 0],
-              }}
-            />
-          </Box>
-
-          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="High Priority"
-              icon="iconoir:priority-high-solid"
-              iconColor="error.main"
-              total={12}
-              chart={{
+              },
+            },
+            {
+              title: 'High Priority',
+              icon: 'iconoir:priority-high-solid',
+              iconColor: 'error.main',
+              total: 12,
+              chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [3, 5, 2, 4, 6, 2, 1],
-              }}
-            />
-          </Box>
-          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="In Progress"
-              total={18}
-              percent={+8}
-              icon="grommet-icons:in-progress"
-              iconColor="warning.main"
-              chart={{
+              },
+            },
+            {
+              title: 'In Progress',
+              icon: 'grommet-icons:in-progress',
+              iconColor: 'warning.main',
+              total: 18,
+              percent: +8,
+              chart: {
                 colors: [theme.palette.warning.light, theme.palette.warning.main],
                 series: [4, 2, 6, 8, 5],
-              }}
-            />
-          </Box>
-
-          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Completed Tasks"
-              iconColor="success.main"
-              total={4}
-              percent={+12}
-              icon="solar:check-circle-bold-duotone"
-              chart={{
+              },
+            },
+            {
+              title: 'Completed Tasks',
+              icon: 'solar:check-circle-bold-duotone',
+              iconColor: 'success.main',
+              total: 4,
+              percent: +12,
+              chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [1, 2, 3, 4, 5],
-              }}
-            />
-          </Box>
-
-          {/* <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Check-in per hour"
-              percent={-5.1}
-              total={averageCheckInsPerHour}
-              chart={{
-                colors: [theme.palette.warning.light, theme.palette.warning.main],
-                series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-              }}
-            />
-          </Box> */}
+              },
+            },
+          ].map((widget, index) => (
+            <Box key={index} sx={{ flex: '1 1 300px', maxWidth: '100%' }}>
+              <AppWidgetSummary {...widget} />
+            </Box>
+          ))}
         </Box>
+
         <InvoiceListViewEdit />
       </Container>
 
