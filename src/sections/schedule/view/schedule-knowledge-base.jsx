@@ -13,7 +13,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 
-export default function TrainingKnowledgeBase() {
+export default function ScheduleKnowledgeBase() {
   return (
     <Box sx={{ mx: 'auto' }}>
       {/* Header */}
@@ -182,7 +182,7 @@ export default function TrainingKnowledgeBase() {
             <Iconify icon="mdi:fire" width={28} color="error.main" sx={{ mr: 2, flexShrink: 0 }} />
             <Box>
               <Typography variant="subtitle1" color="error.main" fontWeight="bold" sx={{ mb: 0.5 }}>
-                Fire Safety
+                Fire Safety 🔥
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
                 <Box component="span" fontWeight="bold">
@@ -220,7 +220,7 @@ export default function TrainingKnowledgeBase() {
             />
             <Box>
               <Typography variant="subtitle1" color="info.main" fontWeight="bold" sx={{ mb: 0.5 }}>
-                Ergonomics 
+                Ergonomics 💪
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
                 <Box component="span" fontWeight="bold">

@@ -297,7 +297,7 @@ export default function UserListView() {
             mb: 4,
           }}
         >
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
+          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
             <AppWidgetSummary
               title="Total Task"
               icon="bi:list-task"
@@ -310,7 +310,7 @@ export default function UserListView() {
             />
           </Box>
 
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
+          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
             <AppWidgetSummary
               title="High Priority"
               icon="iconoir:priority-high-solid"
@@ -322,7 +322,7 @@ export default function UserListView() {
               }}
             />
           </Box>
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
+          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
             <AppWidgetSummary
               title="In Progress"
               total={18}
@@ -336,7 +336,7 @@ export default function UserListView() {
             />
           </Box>
 
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
+          <Box sx={{ flex: 1, minWidth: '', maxWidth: '100%' }}>
             <AppWidgetSummary
               title="Completed Tasks"
               iconColor="success.main"
