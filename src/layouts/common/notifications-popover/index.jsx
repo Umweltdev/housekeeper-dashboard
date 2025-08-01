@@ -17,59 +17,62 @@ import Typography from '@mui/material/Typography';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { _notifications } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { varHover } from 'src/components/animate';
+import { _notifications } from './notification-mock';
 
 import NotificationItem from './notification-item';
 
-// ----------------------------------------------------------------------
-
 const TABS = [
-  {
-    value: 'all',
-    label: 'All',
-    count: 22,
-  },
-  {
-    value: 'unread',
-    label: 'Unread',
-    count: 12,
-  },
-  {
-    value: 'archived',
-    label: 'Archived',
-    count: 10,
-  },
+  { value: 'all', label: 'All' },
+  { value: 'unread', label: 'Unread' },
 ];
-
-// ----------------------------------------------------------------------
 
 export default function NotificationsPopover() {
   const drawer = useBoolean();
-
   const smUp = useResponsive('up', 'sm');
 
   const [currentTab, setCurrentTab] = useState('all');
+  const [notifications, setNotifications] = useState(_notifications);
+
+  const totalUnRead = notifications.filter((item) => item.isUnRead).length;
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
 
-  const [notifications, setNotifications] = useState(_notifications);
-
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
-
   const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
+    setNotifications((prev) =>
+      prev.map((notification) => ({
         ...notification,
         isUnRead: false,
       }))
     );
+  };
+
+  const handleMarkAsRead = useCallback((id) => {
+    setNotifications((prev) =>
+      prev.map((notification) =>
+        notification.id === id ? { ...notification, isUnRead: false } : notification
+      )
+    );
+  }, []);
+
+  const filteredNotifications =
+    currentTab === 'unread' ? notifications.filter((n) => n.isUnRead) : notifications;
+
+  const getLabelColor = (tabValue) => {
+    if (tabValue === 'unread') return 'info';
+    if (tabValue === 'archived') return 'success';
+    return 'default';
+  };
+
+  const getLabelCount = (tabValue) => {
+    if (tabValue === 'unread') return totalUnRead;
+    if (tabValue === 'archived') return 0;
+    return notifications.length;
   };
 
   const renderHead = (
@@ -99,25 +102,20 @@ export default function NotificationsPopover() {
       {TABS.map((tab) => (
         <Tab
           key={tab.value}
-          iconPosition="end"
           value={tab.value}
-          label={tab.label}
-          icon={
-            <Label
-              variant={((tab.value === 'all' || tab.value === currentTab) && 'filled') || 'soft'}
-              color={
-                (tab.value === 'unread' && 'info') ||
-                (tab.value === 'archived' && 'success') ||
-                'default'
-              }
-            >
-              {tab.count}
-            </Label>
+          label={
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <span>{tab.label}</span>
+              <Label
+                variant={tab.value === 'all' || tab.value === currentTab ? 'filled' : 'soft'}
+                color={getLabelColor(tab.value)}
+              >
+                {getLabelCount(tab.value)}
+              </Label>
+            </Stack>
           }
           sx={{
-            '&:not(:last-of-type)': {
-              mr: 3,
-            },
+            '&:not(:last-of-type)': { mr: 3 },
           }}
         />
       ))}
@@ -127,8 +125,12 @@ export default function NotificationsPopover() {
   const renderList = (
     <Scrollbar>
       <List disablePadding>
-        {notifications.map((notification) => (
-          <NotificationItem key={notification.id} notification={notification} />
+        {filteredNotifications.map((notification) => (
+          <NotificationItem
+            key={notification.id}
+            notification={notification}
+            onMarkAsRead={handleMarkAsRead}
+          />
         ))}
       </List>
     </Scrollbar>
@@ -141,7 +143,6 @@ export default function NotificationsPopover() {
         whileTap="tap"
         whileHover="hover"
         variants={varHover(1.05)}
-        color={drawer.value ? 'primary' : 'default'}
         onClick={drawer.onTrue}
       >
         <Badge badgeContent={totalUnRead} color="error">
@@ -171,20 +172,11 @@ export default function NotificationsPopover() {
           sx={{ pl: 2.5, pr: 1 }}
         >
           {renderTabs}
-          <IconButton onClick={handleMarkAllAsRead}>
-            <Iconify icon="solar:settings-bold-duotone" />
-          </IconButton>
         </Stack>
 
         <Divider />
 
         {renderList}
-
-        <Box sx={{ p: 1 }}>
-          <Button fullWidth size="large">
-            View All
-          </Button>
-        </Box>
       </Drawer>
     </>
   );

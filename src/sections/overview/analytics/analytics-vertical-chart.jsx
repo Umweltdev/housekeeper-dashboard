@@ -9,28 +9,15 @@ export default function AnalyticsVerticalChart({ title, bookingData, ...other })
   const [filter, setFilter] = useState('day');
   const theme = useTheme();
 
-  const dummyData = {
-    day: 4,
-    week: 22,
-    month: 97,
-  };
+  const metricKey = title === 'Percentage Task Completion' ? 'taskCompletion' : 'complaints';
 
   return (
-    <Card
-      {...other}
-      // sx={{
-      //   borderRadius: 2,
-      //   boxShadow: 3,
-      //   height: 250,
-      //   width: 270,
-      // }}
-    >
+    <Card {...other}>
       <CardContent
         sx={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          alignItems: 'space-between',
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -55,8 +42,9 @@ export default function AnalyticsVerticalChart({ title, bookingData, ...other })
           </Select>
         </Box>
 
-        <Typography sx={{ fontSize: 50 }} fontWeight="bold" alignItems='bottom'>
-          {fNumber(bookingData[filter])}
+        <Typography sx={{ fontSize: 50 }} fontWeight="bold">
+          {fNumber(bookingData[filter]?.[metricKey] || 0)}
+          {title === 'Percentage Task Completion' ? '%' : ''}
         </Typography>
       </CardContent>
     </Card>
@@ -65,7 +53,5 @@ export default function AnalyticsVerticalChart({ title, bookingData, ...other })
 
 AnalyticsVerticalChart.propTypes = {
   title: PropTypes.string.isRequired,
-  bookingData: PropTypes.object.isRequired, // or PropTypes.shape({ day: ..., week: ..., month: ... })
+  bookingData: PropTypes.object.isRequired,
 };
-
-// export default AnalyticsVerticalChart;

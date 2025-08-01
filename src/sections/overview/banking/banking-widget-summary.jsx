@@ -116,8 +116,6 @@ export default function BankingWidgetSummary({
             {percent > 0 && '+'}
             {fPercent(percent)}
           </Box>
-
-          <Box sx={{ opacity: 0.8 }}>than last month</Box>
         </Stack>
       </Stack>
 

@@ -49,18 +49,7 @@ export default function FileManagerPanel({
         <Box sx={{ typography: 'body2', color: 'text.disabled', mt: 0.5 }}>{subTitle}</Box>
       </Stack>
 
-      {link && (
-        <Button
-          href={link}
-          component={RouterLink}
-          size="small"
-          color="inherit"
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
-        >
-          View All
-        </Button>
-      )}
-
+  
       {onCollapse && (
         <IconButton onClick={onCollapse}>
           <Iconify icon={collapse ? 'eva:arrow-ios-downward-fill' : 'eva:arrow-ios-upward-fill'} />

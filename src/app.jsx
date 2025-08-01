@@ -62,6 +62,7 @@ export default function App() {
               <SnackbarProvider>
                 <CheckoutProvider>
                   <SettingsDrawer />
+
                   <ProgressBar />
                   <Router />
                 </CheckoutProvider>

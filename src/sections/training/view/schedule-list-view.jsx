@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useTheme } from '@mui/material/styles';
-import {
-  Box,
-  Grid,
-  Card,
-  Container,
-  Typography,
-  Pagination,
-} from '@mui/material';
+import { Box, Grid, Card, Container, Typography, Pagination } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -24,7 +17,7 @@ import TrainingKnowledgeBase from './training-knowledge-base';
 
 const defaultFilters = { name: '', status: 'all' };
 
-export default function TrainingListView() {
+export default function ScheduleListView() {
   const { enqueueSnackbar } = useSnackbar();
   const table = useTable({ defaultRowsPerPage: 6 });
   const settings = useSettingsContext();
@@ -59,10 +52,7 @@ export default function TrainingListView() {
       <Box sx={{ mb: { xs: 3, md: 5 } }}>
         <CustomBreadcrumbs
           heading="Training & Resources"
-          links={[
-            { name: 'Dashboard', href: '/dashboard' },
-            { name: 'List' },
-          ]}
+          links={[{ name: 'Dashboard', href: '/dashboard' }, { name: 'List' }]}
         />
       </Box>
 
@@ -110,10 +100,7 @@ export default function TrainingListView() {
         <Grid container spacing={3}>
           {dataInPage.map((row) => (
             <Grid item xs={12} sm={6} md={4} key={row.id}>
-              <TrainingModuleCard
-                module={row}
-                onView={() => handleViewRow(row.url)}
-              />
+              <TrainingModuleCard module={row} onView={() => handleViewRow(row.url)} />
             </Grid>
           ))}
         </Grid>
