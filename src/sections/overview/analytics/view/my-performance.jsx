@@ -9,9 +9,11 @@ import Typography from '@mui/material/Typography';
 import { Button, Select, MenuItem } from '@mui/material';
 
 import { useSettingsContext } from 'src/components/settings';
-
+import AnalyticsConversionRates from '../analytics-conversion-rates';
 import AppAreaInstalled from '../app-area-installed';
+import AppCurrentDownload from '../app-current-download';
 import AnalyticsWidgetSummary from '../analytics-widget-summary';
+import RoomPriority from '../room-priority';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +23,13 @@ const MyPerformance = forwardRef((props, ref) => {
 
   const [range, setRange] = useState('month'); // 'day' | 'month' | 'year'
   const [categoryFilter, setCategoryFilter] = useState('All');
+
+  const userSatisfactionData = [
+    { label: 'Very Satisfied', value: 60 },
+    { label: 'Satisfied', value: 25 },
+    { label: 'Neutral', value: 10 },
+    { label: 'Unsatisfied', value: 5 },
+  ];
 
   const chartRangeData = {
     day: {
@@ -85,6 +94,12 @@ const MyPerformance = forwardRef((props, ref) => {
     },
   };
 
+  const priorityData = [
+    { label: 'High', value: 5 },
+    { label: 'Medium', value: 3 },
+    { label: 'Low', value: 7 },
+  ];
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={ref}>
       <Grid
@@ -112,7 +127,7 @@ const MyPerformance = forwardRef((props, ref) => {
         <Grid xs={12} sm={6} md={4}>
           <AnalyticsWidgetSummary
             title="Total Rooms Cleaned"
-            total="40"
+            total="80"
             color="info"
             icon={<img alt="icon" src="/assets/icons/glass/bed.png" />}
           />
@@ -130,8 +145,8 @@ const MyPerformance = forwardRef((props, ref) => {
 
         <Grid xs={12} sm={6} md={4}>
           <AnalyticsWidgetSummary
-            title="Guest Satisfaction"
-            total="40"
+            title="Guest Satisfaction (NPS)"
+            total="4"
             color="success"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
             unit="/5"
@@ -139,28 +154,96 @@ const MyPerformance = forwardRef((props, ref) => {
         </Grid>
       </Grid>
 
-      <Grid xs={12} md={6} lg={8} sx={{ mt: 5 }}>
-        <AppAreaInstalled
-          title="Task Performance Index"
-          subheader="Distribution of dirty, cleaned, and inspected tasks"
-          chart={{
-            categories: chartRangeData[range].categories,
-            series:
-              chartRangeData[range].series.length > 1
-                ? chartRangeData[range].series
-                : [
-                    {
-                      year: 'Total',
-                      data: chartRangeData[range].series[0].data,
-                    },
-                  ],
-            colors: [
-              [theme.palette.success.light, theme.palette.success.main],
-              [theme.palette.info.light, theme.palette.info.main],
-              [theme.palette.error.light, theme.palette.error.main],
-            ],
-          }}
-        />
+      <Grid container spacing={3} sx={{ mt: 2, alignItems: 'stretch' }}>
+        <Grid item xs={12} md={8}>
+          <Box sx={{ height: '100%' }}>
+            <AppAreaInstalled
+              title="Task Performance Index"
+              subheader="Distribution of dirty, cleaned, and inspected tasks"
+              chart={{
+                categories: chartRangeData[range].categories,
+                series:
+                  chartRangeData[range].series.length > 1
+                    ? chartRangeData[range].series
+                    : [
+                        {
+                          year: 'Total',
+                          data: chartRangeData[range].series[0].data,
+                        },
+                      ],
+                colors: [
+                  [theme.palette.success.light, theme.palette.success.main],
+                  [theme.palette.info.light, theme.palette.info.main],
+                  [theme.palette.error.light, theme.palette.error.main],
+                ],
+              }}
+            />
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Box sx={{ height: '100%' }}>
+            <AppCurrentDownload
+              title="Guest Satisfaction"
+              subheader="Survey responses from recent guests"
+              chart={{
+                series: userSatisfactionData,
+                colors: [
+                  theme.palette.success.main,
+                  theme.palette.info.main,
+                  theme.palette.warning.main,
+                  theme.palette.error.main,
+                ],
+              }}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={3} sx={{ mt: 2 }}>
+        {' '}
+        <Grid item xs={12} md={6}>
+          <RoomPriority
+            title="Room Priority Distribution"
+            subheader="Static count of High, Medium, and Low"
+            data={priorityData}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <AnalyticsConversionRates
+            sx={{ height: 440 }}
+            title="Average Cleaning Time per Room"
+            subheader="(+12%) compared to last year"
+            chart={{
+              series: [
+                { label: 'Jan', value: 42 },
+                { label: 'Feb', value: 39 },
+                { label: 'Mar', value: 41 },
+                { label: 'Apr', value: 37 },
+                { label: 'May', value: 44 },
+                { label: 'Jun', value: 46 },
+                { label: 'Jul', value: 49 },
+                { label: 'Aug', value: 45 },
+                { label: 'Sept', value: 43 },
+                { label: 'Oct', value: 47 },
+                { label: 'Nov', value: 40 },
+                { label: 'Dec', value: 42 },
+              ],
+              options: {
+                yaxis: {
+                  labels: {
+                    formatter: (value) => `${value}`,
+                  },
+                },
+                tooltip: {
+                  y: {
+                    formatter: (value) => `${value} mins`,
+                  },
+                },
+              },
+            }}
+          />
+        </Grid>
       </Grid>
     </Container>
   );

@@ -30,7 +30,7 @@ import AnalyticsStackChart from '../analytics-stack-chart';
 import InquiryTypeChart from '../analytics-inquiry-type-chart';
 import AnalyticsWebsiteVisits from '../analytics-website-visits';
 import AnalyticsVerticalChart from '../analytics-vertical-chart';
-// import CheckInAnalytics from './checkin-analytics';
+// import CheckInAnalytics from './performance-analytics';
 import AnalyticsAggregateChart from '../analytics-aggregate-chart';
 import AnalyticsStackBarByFloor from '../analytic-stack-bar-chart';
 import AnalyticsConversionRates from '../analytics-conversion-rates';
@@ -44,7 +44,9 @@ import RoomStatusDiscrepancyChart from '../analytics-room-status-descripancy-cha
 import InquiryResolutionTimeChart from '../analytics-average-resolution-time-chart';
 import AnalyticsSatisfactionDonutChart from '../analytics-satisfaction-donut-chart';
 import MyPerformance from './my-performance';
-import MySample from './my-sample';
+import MyTask from './my-task';
+import UserInventory from './user-inventory';
+import UserTraining from './user-training';
 import {
   inquiryTypeData,
   totalComplaints,
@@ -77,24 +79,24 @@ export default function OverviewAnalyticsView() {
   console.log(rooms);
   console.log(roomType);
 
-  const checkInRef = useRef(null);
-  const reservationRef = useRef(null);
-  const checkOutRef = useRef(null);
-  const roomStatusRef = useRef(null);
-  const guestInquiryRef = useRef(null);
+  const performanceRef = useRef(null);
+  const taskRef = useRef(null);
+  const inventoryRef = useRef(null);
+  const maintenanceRef = useRef(null);
+  const trainingRef = useRef(null);
   const paymentRef = useRef(null);
 
   const handleScrollTo = (section) => {
-    if (section === 'checkin' && checkInRef.current) {
-      checkInRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else if (section === 'checkout' && checkOutRef.current) {
-      checkOutRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else if (section === 'reservation' && reservationRef.current) {
-      reservationRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else if (section === 'roomstatus' && roomStatusRef.current) {
-      roomStatusRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else if (section === 'guestinquiry' && guestInquiryRef.current) {
-      guestInquiryRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (section === 'performance' && performanceRef.current) {
+      performanceRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else if (section === 'task' && taskRef.current) {
+      taskRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else if (section === 'reservation' && inventoryRef.current) {
+      inventoryRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else if (section === 'maintenance' && maintenanceRef.current) {
+      maintenanceRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else if (section === 'training' && trainingRef.current) {
+      trainingRef.current.scrollIntoView({ behavior: 'smooth' });
     } else if (section === 'payment' && paymentRef.current) {
       paymentRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -134,29 +136,29 @@ export default function OverviewAnalyticsView() {
             <MenuItem value="" disabled>
               Jump to section...
             </MenuItem>
-            <MenuItem value="checkin">Task Analytics</MenuItem>
-            <MenuItem value="checkout">Inventory Analytics</MenuItem>
-            <MenuItem value="reservation">Schedule Analytics</MenuItem>
-            <MenuItem value="roomstatus">Inventory Analytics</MenuItem>
-            <MenuItem value="guestinquiry">Training Analytics</MenuItem>
+            <MenuItem value="performance">My Performance Analytics</MenuItem>
+            <MenuItem value="task">My Tasks Analytics</MenuItem>
+            <MenuItem value="reservation">Inventory Usage Analytics</MenuItem>
+            <MenuItem value="roomstatus">Maintenance Analytics</MenuItem>
+            <MenuItem value="guestinquiry">Training & Resources Analytics</MenuItem>
           </Select>
         </Box>
       </Container>
       {/* <Divider sx={{ my: 2 }} /> */}
-      <>
-        <Box>
-          <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={checkInRef}>
-            <MyPerformance />
-          </Container>
-          <Container
-            maxWidth={settings.themeStretch ? false : 'xl'}
-            ref={checkInRef}
-            sx={{ mt: 5 }}
-          >
-            <MySample />
-          </Container>
-        </Box>
-      </>
+      <Box>
+        <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={performanceRef}>
+          <MyPerformance />
+        </Container>
+        <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={taskRef}>
+          <MyTask />
+        </Container>
+        <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={inventoryRef}>
+          <UserInventory />
+        </Container>
+        <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={inventoryRef}>
+          <UserTraining />
+        </Container>
+      </Box>
     </>
   );
 }

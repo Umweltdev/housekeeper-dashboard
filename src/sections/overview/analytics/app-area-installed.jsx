@@ -95,7 +95,7 @@ export default function AppAreaInstalled({ title, subheader, chart, ...other }) 
                 series={item.data}
                 options={chartOptions}
                 width="100%"
-                height={364}
+                height={400}
               />
             )}
           </Box>
