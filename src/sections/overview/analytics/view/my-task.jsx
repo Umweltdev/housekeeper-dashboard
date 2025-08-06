@@ -170,7 +170,7 @@ const MyTask = forwardRef((props, ref) => {
             <Grid item>
               <Box sx={{ height: '100%' }}>
                 <AnalyticsVerticalChart
-                  sx={{ height: 200 }}
+                  sx={{ height: 247 }}
                   bookingData={DUMMY_CHART_METRICS} // pass full object
                   title="Percentage Task Completion"
                 />
@@ -180,7 +180,7 @@ const MyTask = forwardRef((props, ref) => {
             <Grid item>
               <Box sx={{ height: '100%' }}>
                 <AnalyticsVerticalChart
-                  sx={{ height: 200 }}
+                  sx={{ height: 247 }}
                   bookingData={DUMMY_CHART_METRICS}
                   title="Number of Complaints"
                 />
