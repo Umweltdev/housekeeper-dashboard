@@ -233,7 +233,7 @@ export default function InvoiceListView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container>
         <CustomBreadcrumbs
           heading="List"
           links={[

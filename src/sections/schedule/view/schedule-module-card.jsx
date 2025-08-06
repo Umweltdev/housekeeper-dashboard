@@ -6,7 +6,7 @@ import { Box, Card, Chip, Stack, Button, Divider, Typography } from '@mui/materi
 
 import Iconify from 'src/components/iconify';
 
-export default function TrainingModuleCard({ module, onView }) {
+export default function ScheduleModuleCard({ module, onView }) {
   const theme = useTheme();
 
   // Helper function to get difficulty color
@@ -65,7 +65,7 @@ export default function TrainingModuleCard({ module, onView }) {
           {module.module}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, minHeight: 60 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
           {module.description}
         </Typography>
 
@@ -128,7 +128,7 @@ export default function TrainingModuleCard({ module, onView }) {
         >
           {module.type === 'Video' && 'Watch Video'}
           {module.type === 'Document' && 'View PDF'}
-          {module.type === 'Interactive' && 'Start Training'}
+          {module.type === 'Interactive' && 'Start Schedule'}
           {!module.type && (module.action || 'Start Learning')}
         </Button>
       </Box>
@@ -136,7 +136,7 @@ export default function TrainingModuleCard({ module, onView }) {
   );
 }
 
-TrainingModuleCard.propTypes = {
+ScheduleModuleCard.propTypes = {
   module: PropTypes.shape({
     id: PropTypes.string.isRequired,
     module: PropTypes.string.isRequired,

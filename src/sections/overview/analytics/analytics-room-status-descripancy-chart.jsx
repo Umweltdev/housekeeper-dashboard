@@ -34,7 +34,7 @@ export default function RoomStatusDiscrepancyChart({ title, subheader, chart, ..
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
       <Box sx={{ p: 3, pb: 1 }}>
-        <Chart type="bar" series={series} options={chartOptions} width="100%" height={364} />
+        <Chart type="bar" series={series} options={chartOptions} width="100%" height={325} />
       </Box>
     </Card>
   );

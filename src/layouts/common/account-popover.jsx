@@ -96,6 +96,7 @@ export default function AccountPopover() {
         </Avatar>
       </IconButton>
 
+
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>

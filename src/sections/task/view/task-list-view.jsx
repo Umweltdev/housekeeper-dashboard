@@ -104,53 +104,6 @@ export default function UserListView() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 56 : 56 + 20;
-  const canReset = !isEqual(defaultFilters, filters);
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  const handleFilters = useCallback(
-    (name, value) => {
-      table.onResetPage();
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    [table]
-  );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
-  const handleDeleteRow = useCallback(
-    async (id) => {
-      try {
-        await axiosInstance.delete(`/api/booking/${id}`);
-        enqueueSnackbar('Deleted Successfully!', { variant: 'success' });
-        setTableData((prevData) => prevData.filter((row) => row._id !== id));
-        refreshBookings();
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [refreshBookings, enqueueSnackbar]
-  );
-
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
-
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.booking.details(id));
-    },
-    [router]
-  );
-
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
     enqueueSnackbar('Delete success!');
@@ -180,40 +133,6 @@ export default function UserListView() {
   const dailyGuests = {};
   const leadTimeData = [];
   const lengthOfStayData = [];
-
-  const calculateAverageCheckinTime = () => {
-    if (checkInDates.length === 0) return 'No data';
-
-    // Filter by selected month if needed
-    const filteredDates =
-      selectedMonth === 'all'
-        ? checkInDates
-        : checkInDates.filter((date) => date.getMonth() + 1 === Number(selectedMonth));
-
-    if (filteredDates.length === 0) return 'No data';
-
-    // Calculate average hour
-    const totalHours = filteredDates.reduce((sum, date) => sum + date.getHours(), 0);
-    const avgHour = Math.round(totalHours / filteredDates.length);
-
-    // Format as time (e.g., "2:30 PM")
-    const avgDate = new Date();
-    avgDate.setHours(avgHour, 0, 0, 0);
-    return avgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  const calculateHourlyCheckinDistribution = () => {
-    const hourlyCounts = Array(24).fill(0);
-
-    checkInDates.forEach((date) => {
-      const hour = date.getHours();
-      hourlyCounts[hour]++;
-    });
-
-    // Normalize to percentage for chart
-    const maxCount = Math.max(...hourlyCounts);
-    return hourlyCounts.map((count) => (maxCount ? Math.round((count / maxCount) * 100) : 0));
-  };
 
   // Process bookings data
   bookings.forEach((booking) => {
@@ -285,83 +204,77 @@ export default function UserListView() {
           }}
         />
         {/* <Divider /> */}
+
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            rowGap: 4,
-            columnGap: 3,
+            flexWrap: 'wrap',
             justifyContent: 'center',
             alignItems: 'stretch',
-            flexWrap: 'wrap',
+            rowGap: 2,
+            columnGap: 2,
             mb: 4,
           }}
         >
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Total Task"
-              icon="bi:list-task"
-              iconColor="info.main"
-              total={23}
-              chart={{
+          {[
+            {
+              title: 'Total Task',
+              icon: 'bi:list-task',
+              iconColor: 'info.main',
+              total: 23,
+              chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [3, 5, 2, 4, 6, 2, 1, 1, 0],
-              }}
-            />
-          </Box>
-
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="High Priority"
-              icon="iconoir:priority-high-solid"
-              iconColor="error.main"
-              total={12}
-              chart={{
+              },
+            },
+            {
+              title: 'High Priority',
+              icon: 'iconoir:priority-high-solid',
+              iconColor: 'error.main',
+              total: 12,
+              chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [3, 5, 2, 4, 6, 2, 1],
-              }}
-            />
-          </Box>
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="In Progress"
-              total={18}
-              percent={+8}
-              icon="grommet-icons:in-progress"
-              iconColor="warning.main"
-              chart={{
+              },
+            },
+            {
+              title: 'In Progress',
+              icon: 'grommet-icons:in-progress',
+              iconColor: 'warning.main',
+              total: 18,
+              percent: +8,
+              chart: {
                 colors: [theme.palette.warning.light, theme.palette.warning.main],
                 series: [4, 2, 6, 8, 5],
-              }}
-            />
-          </Box>
-
-          <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Completed Tasks"
-              iconColor="success.main"
-              total={4}
-              percent={+12}
-              icon="solar:check-circle-bold-duotone"
-              chart={{
+              },
+            },
+            {
+              title: 'Completed Tasks',
+              icon: 'solar:check-circle-bold-duotone',
+              iconColor: 'success.main',
+              total: 4,
+              percent: +12,
+              chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [1, 2, 3, 4, 5],
+              },
+            },
+          ].map((item, index) => (
+            <Box
+              key={index}
+              sx={{
+                flexBasis: { xs: '100%', sm: '48%', md: 'calc(33% - 16px)', lg: '100px' },
+                minWidth: '100px',
+                maxWidth: '100%',
+                flexGrow: 1,
               }}
-            />
-          </Box>
-
-          {/* <Box sx={{ flex: 1, minWidth: '300px', maxWidth: '100%' }}>
-            <AppWidgetSummary
-              title="Check-in per hour"
-              percent={-5.1}
-              total={averageCheckInsPerHour}
-              chart={{
-                colors: [theme.palette.warning.light, theme.palette.warning.main],
-                series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-              }}
-            />
-          </Box> */}
+            >
+              <AppWidgetSummary {...item} />
+            </Box>
+          ))}
         </Box>
+
         <InvoiceListViewEdit />
       </Container>
 
