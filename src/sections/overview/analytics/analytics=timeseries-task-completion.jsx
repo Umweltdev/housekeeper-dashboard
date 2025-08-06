@@ -68,7 +68,7 @@ export default function AnalyticsTimeSeriesTaskCompletion({ title, subheader }) 
     <Card>
       <CardHeader title={title} subheader={subheader} />
       <Box sx={{ p: 3, pb: 1 }}>
-        <Chart type="bar" series={chartData.series} options={chartOptions} height={300} />
+        <Chart type="bar" series={chartData.series} options={chartOptions} height={392} />
       </Box>
     </Card>
   );

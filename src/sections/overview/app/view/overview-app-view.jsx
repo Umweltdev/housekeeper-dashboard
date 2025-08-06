@@ -18,14 +18,12 @@ import { useGetUsers } from 'src/api/user';
 import { useGetBookings } from 'src/api/booking';
 import { useGetRoomType } from 'src/api/roomType';
 
-
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
 import AppNewInvoice from '../app-new-invoice';
 import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
-
 
 // ----------------------------------------------------------------------
 
@@ -280,7 +278,7 @@ export default function OverviewAppView() {
           />
         </Grid>
 
-        <Grid xs={12} lg={8}>
+        <Grid xs={12} sx={{ width: '100%' }}>
           <AppNewInvoice
             title="New Invoice"
             tableLabels={[
@@ -288,7 +286,7 @@ export default function OverviewAppView() {
               { id: 'rooms', label: 'Rooms' },
               { id: 'price', label: 'Price' },
               { id: 'status', label: 'Status' },
-              { id: '', label: '' }, // Ensure the last column has a label, even if empty
+              { id: '', label: '' },
             ]}
           />
         </Grid>

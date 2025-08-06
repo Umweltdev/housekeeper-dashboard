@@ -9,7 +9,7 @@ import Chart, { useChart } from 'src/components/chart';
 
 // ----------------------------------------------------------------------
 
-const CHART_HEIGHT = 310;
+const CHART_HEIGHT = 400;
 const LEGEND_HEIGHT = 70;
 
 const StyledChart = styled(Chart)(({ theme }) => ({
@@ -88,7 +88,7 @@ export default function TrainingTypePieChart({ title, subheader, chart, ...other
           series={chartSeries}
           options={chartOptions}
           width="100%"
-          height={280}
+          height={290}
         />
       ) : (
         <Box sx={{ textAlign: 'center', py: 5, color: theme.palette.text.secondary }}>

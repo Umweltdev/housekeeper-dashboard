@@ -97,7 +97,7 @@ export default function OverviewAnalyticsView() {
       maintenanceRef.current.scrollIntoView({ behavior: 'smooth' });
     } else if (section === 'training' && trainingRef.current) {
       trainingRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else if (section === 'payment' && paymentRef.current) {
+    } else if (section === 'training' && paymentRef.current) {
       paymentRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -136,11 +136,10 @@ export default function OverviewAnalyticsView() {
             <MenuItem value="" disabled>
               Jump to section...
             </MenuItem>
-            <MenuItem value="performance">My Performance Analytics</MenuItem>
+            <MenuItem value="performance">My Task Performance</MenuItem>
             <MenuItem value="task">My Tasks Analytics</MenuItem>
             <MenuItem value="reservation">Inventory Usage Analytics</MenuItem>
-            <MenuItem value="roomstatus">Maintenance Analytics</MenuItem>
-            <MenuItem value="guestinquiry">Training & Resources Analytics</MenuItem>
+            <MenuItem value="training">Training & Resources</MenuItem>
           </Select>
         </Box>
       </Container>
@@ -155,7 +154,7 @@ export default function OverviewAnalyticsView() {
         <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={inventoryRef}>
           <UserInventory />
         </Container>
-        <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={inventoryRef}>
+        <Container maxWidth={settings.themeStretch ? false : 'xl'} ref={trainingRef}>
           <UserTraining />
         </Container>
       </Box>
