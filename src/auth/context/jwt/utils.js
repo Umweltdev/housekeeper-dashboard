@@ -1,5 +1,4 @@
 import { paths } from 'src/routes/paths';
-
 import axios from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
@@ -35,13 +34,10 @@ export const isValidToken = (accessToken) => {
 // ----------------------------------------------------------------------
 
 export const tokenExpired = (exp) => {
-  // eslint-disable-next-line prefer-const
   let expiredTimer;
 
   const currentTime = Date.now();
 
-  // Test token expires after 10s
-  // const timeLeft = currentTime + 10000 - currentTime; // ~10s
   const timeLeft = exp * 1000 - currentTime;
   clearTimeout(expiredTimer);
 
@@ -62,8 +58,7 @@ export const setSession = (accessToken) => {
     sessionStorage.setItem('accessToken', accessToken);
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-    // This function below will handle when token is expired
-    const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+    const { exp } = jwtDecode(accessToken);
     tokenExpired(exp);
   } else {
     sessionStorage.removeItem('accessToken');
@@ -71,3 +66,5 @@ export const setSession = (accessToken) => {
     delete axios.defaults.headers.common.Authorization;
   }
 };
+
+export { jwtDecode };

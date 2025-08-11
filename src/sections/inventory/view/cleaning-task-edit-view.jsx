@@ -25,7 +25,7 @@ import {
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
-const STATUS_OPTIONS = ['dirty', 'cleaned'];
+const STATUS_OPTIONS = ['dirty', 'cleaned', 'inspected']; // Updated to include 'inspected'
 const STATUS_COLORS = {
   dirty: 'error',
   cleaned: 'success',
@@ -39,12 +39,12 @@ const PRIORITY_COLORS = {
 };
 
 export default function CleaningTaskEditForm({ task }) {
-  const router = useNavigate();
+  const navigate = useNavigate();
 
-  const [issues, setIssues] = useState(task.maintenanceAndDamages || []);
+  const [issues, setIssues] = useState(task.status.maintenanceAndDamages || []);
   const [newIssue, setNewIssue] = useState('');
   const [newIssuePriority, setNewIssuePriority] = useState('Medium');
-  const [status, setStatus] = useState(task.status);
+  const [status, setStatus] = useState(task.status.statusType || 'dirty'); // Use statusType
   const [isSaving, setIsSaving] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -86,7 +86,7 @@ export default function CleaningTaskEditForm({ task }) {
       setOpenSnackbar(true);
 
       setTimeout(() => {
-        router('/dashboard/task');
+        navigate('/dashboard/task');
       }, 1500);
     }, 1500);
   };
@@ -99,17 +99,15 @@ export default function CleaningTaskEditForm({ task }) {
           <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
             <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
               <Typography variant="h6" component="h2">
-                Room #{task.room}
+                Room #{task.roomId.roomNumber || task.room || 'N/A'}
               </Typography>
-
               <Label
                 variant="soft"
-                color={STATUS_COLORS[task.status] || 'default'}
+                color={STATUS_COLORS[task.status.statusType] || 'default'}
                 sx={{ textTransform: 'capitalize' }}
               >
-                {task.status}
+                {task.status.statusType}
               </Label>
-
               <Label
                 variant="soft"
                 color={PRIORITY_COLORS[task.priority] || 'default'}
@@ -124,13 +122,13 @@ export default function CleaningTaskEditForm({ task }) {
             <Stack spacing={2}>
               <TextField
                 label="Room Category"
-                value={task.category}
+                value={task.roomId?.roomType?.title || task.category || 'Unknown'}
                 fullWidth
                 InputProps={{ readOnly: true }}
               />
               <TextField
                 label="Description"
-                value={task.description}
+                value={task.status.description || 'No description'}
                 multiline
                 rows={3}
                 fullWidth
@@ -147,12 +145,12 @@ export default function CleaningTaskEditForm({ task }) {
               <Stack direction="row" alignItems="center" spacing={1}>
                 <TextField
                   label="Priority"
-                  value={task.priority}
+                  value={task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                   fullWidth
                   InputProps={{ readOnly: true }}
                 />
                 <Chip
-                  label={task.priority}
+                  label={task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                   color={PRIORITY_COLORS[task.priority]}
                   size="small"
                   variant="soft"
@@ -324,7 +322,7 @@ export default function CleaningTaskEditForm({ task }) {
           variant="outlined"
           color="inherit"
           startIcon={<Iconify icon="eva:close-fill" />}
-          onClick={() => router('/dashboard/task')}
+          onClick={() => navigate('/dashboard/task')}
           disabled={isSaving}
         >
           Cancel
@@ -364,20 +362,25 @@ export default function CleaningTaskEditForm({ task }) {
 
 CleaningTaskEditForm.propTypes = {
   task: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    room: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    roomId: PropTypes.shape({
+      roomNumber: PropTypes.number.isRequired,
+    }).isRequired,
+    category: PropTypes.string,
+    description: PropTypes.string,
     dueDate: PropTypes.string.isRequired,
     priority: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    maintenanceAndDamages: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        description: PropTypes.string,
-        priority: PropTypes.string,
-        date: PropTypes.string,
-      })
-    ),
+    status: PropTypes.shape({
+      statusType: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      detailedIssues: PropTypes.array,
+      maintenanceAndDamages: PropTypes.arrayOf(
+        PropTypes.shape({
+          issue: PropTypes.string,
+          issuePriority: PropTypes.string,
+          reportedAt: PropTypes.string,
+        })
+      ),
+    }).isRequired,
   }).isRequired,
 };

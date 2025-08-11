@@ -26,27 +26,28 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import axiosInstance from 'src/utils/axios';
-
-import { useGetUser } from 'src/api/user';
+import { useAuthContext } from 'src/auth/hooks';
+import { useCreateInventory } from 'src/api/inventory';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-export default function UserDetailsView({ id }) {
+// ----------------------------------------------------------------------
+
+export default function InventoryRequestView() {
   const router = useRouter();
   const settings = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
-  const { user: currentUser } = useGetUser(id);
+  const { user: currentUser } = useAuthContext();
+  const { createInventory, createLoading } = useCreateInventory();
 
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  console.log('CURRENT-USER', currentUser);
+
   const [openInventoryDialog, setOpenInventoryDialog] = useState(false);
-
   const [formData, setFormData] = useState({
     items: [{ item: 'Pillows', quantity: 0 }],
     reason: '',
-    isLowStock: false,
   });
 
   const handleInputChange = (index, field, value) => {
@@ -70,35 +71,31 @@ export default function UserDetailsView({ id }) {
     setFormData({
       items: [{ item: 'Pillows', quantity: 0 }],
       reason: '',
-      isLowStock: false,
     });
   };
 
   const handleSubmit = async () => {
     try {
-      // await axiosInstance.post('/api/inventory/request', {
-      //   userId: id,
-      //   ...formData,
-      // });
-      enqueueSnackbar('Inventory request submitted successfully', { variant: 'success' });
+      const validRequests = formData.items
+        .filter((item) => item.item.trim() && Number(item.quantity) > 0)
+        .map((item) => {
+          const requestData = {
+            housekeeperId: currentUser?._id,
+            name: item.item,
+            quantity: Number(item.quantity),
+            requestDate: new Date().toISOString(),
+            status: 'requested',
+          };
+          console.log('SUBMITTING_ITEM:', requestData); // Debug log
+          return createInventory(requestData);
+        });
+
+      await Promise.all(validRequests);
       handleReset();
       setOpenInventoryDialog(false);
-
       router.push(paths.dashboard.inventory.root);
     } catch (error) {
-      enqueueSnackbar('Failed to submit inventory request', { variant: 'error' });
-    }
-  };
-
-  const handleDeleteUser = async () => {
-    try {
-      await axiosInstance.delete(`/api/user/${id}`);
-      enqueueSnackbar('User deleted successfully', { variant: 'success' });
-      window.location.href = paths.dashboard.user.root;
-    } catch (error) {
-      enqueueSnackbar('Failed to delete user', { variant: 'error' });
-    } finally {
-      setOpenConfirmDialog(false);
+      // Error notification handled in useCreateInventory
     }
   };
 
@@ -114,7 +111,7 @@ export default function UserDetailsView({ id }) {
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           { name: 'Inventory', href: paths.dashboard.inventory.root },
-          { name: 'Request', href: '' },
+          { name: 'Request' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
@@ -137,6 +134,7 @@ export default function UserDetailsView({ id }) {
                     label="Item"
                     value={item.item}
                     onChange={(e) => handleInputChange(index, 'item', e.target.value)}
+                    disabled={createLoading}
                   >
                     <MenuItem value="Pillows">Pillows</MenuItem>
                     <MenuItem value="Blankets">Blankets</MenuItem>
@@ -163,7 +161,7 @@ export default function UserDetailsView({ id }) {
                           Math.max(Number(item.quantity || 0) - 1, 0)
                         )
                       }
-                      disabled={Number(item.quantity || 0) <= 0}
+                      disabled={Number(item.quantity || 0) <= 0 || createLoading}
                       sx={{
                         border: '1px solid #ccc',
                         bgcolor: 'background.paper',
@@ -198,6 +196,7 @@ export default function UserDetailsView({ id }) {
                       onClick={() =>
                         handleInputChange(index, 'quantity', Number(item.quantity || 0) + 1)
                       }
+                      disabled={createLoading}
                       sx={{
                         border: '1px solid #ccc',
                         bgcolor: 'background.paper',
@@ -219,7 +218,12 @@ export default function UserDetailsView({ id }) {
               ))}
 
               <Box>
-                <Button color="primary" size="small" onClick={handleAddItem} disabled={!canAddMore}>
+                <Button
+                  color="primary"
+                  size="small"
+                  onClick={handleAddItem}
+                  disabled={!canAddMore || createLoading}
+                >
                   + Add Another Item
                 </Button>
               </Box>
@@ -233,19 +237,20 @@ export default function UserDetailsView({ id }) {
                 label="Reason for Request"
                 value={formData.reason}
                 onChange={handleReasonChange}
+                disabled={createLoading}
               />
 
               <Stack direction="row" spacing={2} justifyContent="flex-end">
-                <Button variant="outlined" onClick={handleReset}>
+                <Button variant="outlined" onClick={handleReset} disabled={createLoading}>
                   Cancel
                 </Button>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={() => setOpenInventoryDialog(true)}
-                  disabled={!hasValidItems || formData.items.length === 0}
+                  disabled={!hasValidItems || formData.items.length === 0 || createLoading}
                 >
-                  Submit Request
+                  {createLoading ? 'Submitting...' : 'Submit Request'}
                 </Button>
               </Stack>
             </Stack>
@@ -288,12 +293,12 @@ export default function UserDetailsView({ id }) {
                       size="small"
                       color="error"
                       onClick={() => {
-                        // Prevent deleting the last item
                         if (formData.items.length === 1) return;
                         const newItems = [...formData.items];
                         newItems.splice(index, 1);
                         setFormData({ ...formData, items: newItems });
                       }}
+                      disabled={createLoading}
                     >
                       <Iconify icon="ic:round-delete" />
                     </IconButton>
@@ -314,36 +319,20 @@ export default function UserDetailsView({ id }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenInventoryDialog(false)}>Cancel</Button>
-          <Button variant="contained" color="primary" onClick={handleSubmit} autoFocus>
-            Submit
+          <Button onClick={() => setOpenInventoryDialog(false)} disabled={createLoading}>
+            Cancel
           </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
-        <DialogTitle>Delete User</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete{' '}
-            <strong>
-              {currentUser?.firstName} {currentUser?.lastName}
-            </strong>
-            ? This action cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenConfirmDialog(false)}>Cancel</Button>
-          <Button variant="contained" color="error" onClick={handleDeleteUser} autoFocus>
-            Delete
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            autoFocus
+            disabled={createLoading}
+          >
+            {createLoading ? 'Submitting...' : 'Submit'}
           </Button>
         </DialogActions>
       </Dialog>
     </Container>
   );
 }
-
-UserDetailsView.propTypes = {
-  id: PropTypes.string,
-};

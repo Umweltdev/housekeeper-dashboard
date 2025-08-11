@@ -36,7 +36,7 @@ const UserDetailsPage = lazy(() => import('src/pages/dashboard/task/details'));
 
 // const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/task/new'));
-const UserEditPage = lazy(() => import('src/pages/dashboard/task/edit'));
+const TaskEditPage = lazy(() => import('src/pages/dashboard/task/edit'));
 
 const InventoryListPage = lazy(() => import('src/pages/dashboard/inventory/list'));
 const InventoryDetailsPage = lazy(() => import('src/pages/dashboard/inventory/details'));
@@ -101,7 +101,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <UserListPage /> },
           { path: 'new', element: <UserCreatePage /> },
           { path: ':id', element: <UserDetailsPage /> },
-          { path: ':id/edit', element: <UserEditPage /> },
+          { path: ':id/edit', element: <TaskEditPage /> },
           // { path: 'account', element: <UserAccountPage /> },
         ],
       },

@@ -16,11 +16,25 @@ export default axiosInstance;
 // ----------------------------------------------------------------------
 
 export const fetcher = async (args) => {
-  const [url, config] = Array.isArray(args) ? args : [args];
+  const [url, config = {}] = Array.isArray(args) ? args : [args];
+  const method = (config.method || 'GET').toUpperCase();
+  console.log('Fetcher request:', { url, method, data: config.data }); // Debug log
 
-  const res = await axiosInstance.get(url, { ...config });
-
-  return res.data;
+  try {
+    const res = await axiosInstance({
+      url,
+      method,
+      data: config.data,
+      headers: {
+        'Content-Type': 'application/json',
+        ...config.headers,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error('Fetcher error:', error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
 };
 
 // ----------------------------------------------------------------------
@@ -56,12 +70,10 @@ export const endpoints = {
     roomType: '/api/room/roomType',
     updateRoom: '/api/room',
   },
-
   roomType: {
     list: '/api/room-type',
     details: '/api/room-type',
   },
-
   user: {
     list: '/api/user',
     details: '/api/user',
@@ -81,5 +93,15 @@ export const endpoints = {
   invoice: {
     list: '/api/invoice',
     details: '/api/invoice',
+  },
+  task: {
+    list: '/api/task',
+    details: '/api/task',
+  },
+  inventory: {
+    list: '/api/inventory',
+    details: '/api/inventory',
+    create: '/api/inventory',
+    delete: '/api/inventory',
   },
 };
