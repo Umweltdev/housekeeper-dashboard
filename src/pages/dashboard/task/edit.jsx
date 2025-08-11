@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
+import { TaskEditView } from 'src/sections/task/view';
 
-import { UserEditView } from 'src/sections/task/view';
+// import { TaskEditView } from 'src/sections/task/view';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +18,7 @@ export default function UserEditPage() {
         <title> Dashboard: Task Update</title>
       </Helmet>
 
-      <UserEditView id={`${id}`} />
+      <TaskEditView id={`${id}`} />
     </>
   );
 }

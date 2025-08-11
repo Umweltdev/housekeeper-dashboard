@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { mutate } from 'swr';
 
 import {
   Box,
@@ -24,6 +25,8 @@ import {
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { paths } from 'src/routes/paths';
+import { endpoints } from 'src/utils/axios';
 
 const STATUS_OPTIONS = ['dirty', 'cleaned'];
 const STATUS_COLORS = {
@@ -31,38 +34,42 @@ const STATUS_COLORS = {
   cleaned: 'success',
   inspected: 'info',
 };
-const MAINTENANCE_PRIORITIES = ['Low', 'Medium', 'High'];
+const MAINTENANCE_PRIORITIES = ['low', 'medium', 'high'];
 const PRIORITY_COLORS = {
-  Low: 'info',
-  Medium: 'warning',
-  High: 'error',
+  low: 'info',
+  medium: 'warning',
+  high: 'error',
 };
 
-export default function CleaningTaskEditForm({ task }) {
-  const router = useNavigate();
-
-  const [issues, setIssues] = useState(task.maintenanceAndDamages || []);
+export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
+  const navigate = useNavigate();
+  const [issues, setIssues] = useState(
+    task.status.maintenanceAndDamages.map((item) => ({
+      id: item._id || Date.now().toString(),
+      description: item.issue,
+      priority: item.issuePriority,
+      date: item.reportedAt,
+    })) || []
+  );
   const [newIssue, setNewIssue] = useState('');
-  const [newIssuePriority, setNewIssuePriority] = useState('Medium');
-  const [status, setStatus] = useState(task.status);
-  const [isSaving, setIsSaving] = useState(false);
+  const [newIssuePriority, setNewIssuePriority] = useState('medium');
+  const [status, setStatus] = useState(task.status.statusType || 'dirty');
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [error, setError] = useState(null);
 
   const isStatusEditable = status === 'dirty' || status === 'cleaned';
 
   const handleAddIssue = () => {
     if (newIssue.trim() && MAINTENANCE_PRIORITIES.includes(newIssuePriority)) {
-      setIssues([
-        ...issues,
-        {
-          id: Date.now().toString(),
-          description: newIssue,
-          date: new Date().toLocaleDateString(),
-          priority: newIssuePriority,
-        },
-      ]);
+      const newIssueObj = {
+        id: Date.now().toString(),
+        description: newIssue,
+        priority: newIssuePriority,
+        date: new Date().toISOString(),
+      };
+      setIssues([...issues, newIssueObj]);
       setNewIssue('');
-      setNewIssuePriority('Medium');
+      setNewIssuePriority('medium');
     }
   };
 
@@ -78,36 +85,44 @@ export default function CleaningTaskEditForm({ task }) {
     );
   };
 
-  const handleSaveChanges = () => {
-    setIsSaving(true);
-
-    setTimeout(() => {
-      setIsSaving(false);
+  const handleSaveChanges = async () => {
+    try {
+      await onSave(task._id, {
+        status,
+        issues,
+      });
+      // Trigger a global refresh of the task list
+      await mutate(endpoints.task.list, undefined, { revalidate: true });
+      await mutate(`${endpoints.task.list}/housekeeper/${task.housekeeperId}`, undefined, {
+        revalidate: true,
+      });
       setOpenSnackbar(true);
-
       setTimeout(() => {
-        router('/dashboard/task');
+        navigate(paths.dashboard.task.root);
       }, 1500);
-    }, 1500);
+    } catch (err) {
+      setError(err.message || 'Failed to save changes');
+      setOpenSnackbar(true);
+    }
   };
 
   return (
     <Box>
       <Grid container spacing={3}>
-        {/* Room Info */}
+        {/* Room Info (Left) */}
         <Grid item xs={12} md={6} sx={{ maxHeight: 1000, overflowY: 'auto' }}>
           <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
             <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
               <Typography variant="h6" component="h2">
-                Room #{task.room}
+                Room #{task.roomId?.roomNumber || 'N/A'}
               </Typography>
 
               <Label
                 variant="soft"
-                color={STATUS_COLORS[task.status] || 'default'}
+                color={STATUS_COLORS[status] || 'default'}
                 sx={{ textTransform: 'capitalize' }}
               >
-                {task.status}
+                {status}
               </Label>
 
               <Label
@@ -124,13 +139,13 @@ export default function CleaningTaskEditForm({ task }) {
             <Stack spacing={2}>
               <TextField
                 label="Room Category"
-                value={task.category}
+                value={task.roomId?.roomType?.title || 'Unknown'}
                 fullWidth
                 InputProps={{ readOnly: true }}
               />
               <TextField
                 label="Description"
-                value={task.description}
+                value={task.status?.description || 'No description'}
                 multiline
                 rows={3}
                 fullWidth
@@ -188,7 +203,7 @@ export default function CleaningTaskEditForm({ task }) {
           </Paper>
         </Grid>
 
-        {/* Issues Section */}
+        {/* Issues Section (Right) */}
         <Grid item xs={12} md={6} sx={{ maxHeight: 550 }}>
           <Card
             elevation={3}
@@ -234,7 +249,7 @@ export default function CleaningTaskEditForm({ task }) {
                 >
                   {MAINTENANCE_PRIORITIES.map((priority) => (
                     <MenuItem key={priority} value={priority}>
-                      {priority}
+                      {priority.charAt(0).toUpperCase() + priority.slice(1)}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -245,7 +260,7 @@ export default function CleaningTaskEditForm({ task }) {
                   onClick={handleAddIssue}
                   variant="contained"
                   startIcon={<Iconify icon="eva:plus-fill" />}
-                  disabled={!newIssue.trim()}
+                  disabled={!newIssue.trim() || isSaving}
                 >
                   Add Issue
                 </Button>
@@ -264,7 +279,7 @@ export default function CleaningTaskEditForm({ task }) {
                               {issue.description}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                              Reported: {issue.date || new Date().toLocaleDateString()}
+                              Reported: {new Date(issue.date).toLocaleDateString()}
                             </Typography>
                           </Box>
                           <Stack direction="row" spacing={1} alignItems="center">
@@ -286,12 +301,13 @@ export default function CleaningTaskEditForm({ task }) {
                                 />
                               }
                             >
-                              {issue.priority}
+                              {issue.priority.charAt(0).toUpperCase() + issue.priority.slice(1)}
                             </Button>
                             <IconButton
                               size="small"
                               onClick={() => handleRemoveIssue(issue.id)}
                               color="error"
+                              disabled={isSaving}
                             >
                               <Iconify icon="eva:trash-2-outline" width={18} />
                             </IconButton>
@@ -324,7 +340,7 @@ export default function CleaningTaskEditForm({ task }) {
           variant="outlined"
           color="inherit"
           startIcon={<Iconify icon="eva:close-fill" />}
-          onClick={() => router('/dashboard/task')}
+          onClick={() => navigate(paths.dashboard.task.root)}
           disabled={isSaving}
         >
           Cancel
@@ -354,8 +370,12 @@ export default function CleaningTaskEditForm({ task }) {
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
-          Changes saved successfully!
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={error ? 'error' : 'success'}
+          sx={{ width: '100%' }}
+        >
+          {error || 'Changes saved successfully!'}
         </Alert>
       </Snackbar>
     </Box>
@@ -364,20 +384,31 @@ export default function CleaningTaskEditForm({ task }) {
 
 CleaningTaskEditForm.propTypes = {
   task: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    room: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    housekeeperId: PropTypes.string.isRequired,
+    roomId: PropTypes.shape({
+      roomNumber: PropTypes.string.isRequired,
+      roomType: PropTypes.shape({
+        _id: PropTypes.string,
+        title: PropTypes.string,
+      }),
+    }).isRequired,
+    status: PropTypes.shape({
+      statusType: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      maintenanceAndDamages: PropTypes.arrayOf(
+        PropTypes.shape({
+          _id: PropTypes.string,
+          issue: PropTypes.string,
+          issuePriority: PropTypes.string,
+          reportedAt: PropTypes.string,
+        })
+      ),
+      detailedIssues: PropTypes.array,
+    }).isRequired,
     dueDate: PropTypes.string.isRequired,
     priority: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    maintenanceAndDamages: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        description: PropTypes.string,
-        priority: PropTypes.string,
-        date: PropTypes.string,
-      })
-    ),
   }).isRequired,
+  onSave: PropTypes.func.isRequired,
+  isSaving: PropTypes.bool.isRequired,
 };

@@ -27,6 +27,8 @@ export function useGetRoomType() {
   return memoizedValue;
 }
 
+
+
 // ----------------------------------------------------------------------
 
 export function useRoomType(id) {
@@ -66,4 +68,30 @@ export function useSearchRoomTypes(query) {
   );
 
   return memoizedValue;
+}
+
+export function useGetTasksByHousekeeper(housekeeperId) {
+  const URL = `${endpoints.task.list}/${housekeeperId}`;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    shouldRetryOnError: false,
+  });
+
+  const refreshTasks = useCallback(() => {
+    mutate(URL);
+  }, [URL]);
+
+  return useMemo(
+    () => ({
+      tasks: data?.data || [],
+      tasksLoading: isLoading,
+      tasksError: error,
+      tasksValidating: isValidating,
+      tasksEmpty: !isLoading && !data?.data?.length,
+      refreshTasks,
+    }),
+    [data, error, isLoading, isValidating, refreshTasks]
+  );
 }

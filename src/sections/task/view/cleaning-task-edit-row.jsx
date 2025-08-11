@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useMarkAsCleaned } from 'src/api/task';
 
 import { fDate, fTime } from 'src/utils/format-time';
 
@@ -27,36 +28,35 @@ export default function CleaningTaskTableRow({
   onSelectRow,
   onEditRow,
   onDeleteRow,
+  onUpdateStatus,
 }) {
-  const { room, category, description, dueDate, priority, status } = row;
-
+  const { room, category, description, dueDate, priority, status, _id } = row;
+  const [localStatus, setLocalStatus] = useState(status); // Local state for optimistic updates
   const confirm = useBoolean();
   const popover = usePopover();
+  const { markAsCleaned, isLoading: markingCleaned } = useMarkAsCleaned();
 
-  const [markingCleaned, setMarkingCleaned] = useState(false);
-
-  const canMarkAsCleaned = status === 'dirty';
+  const canMarkAsCleaned = localStatus === 'dirty' || localStatus === 'cleaned';
 
   const handleMarkAsCleaned = async () => {
-    setMarkingCleaned(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Trigger update event to parent
-    if (typeof window !== 'undefined') {
-      const event = new CustomEvent('taskStatusUpdated', { detail: row.id });
-      window.dispatchEvent(event);
+    const newStatus = localStatus === 'dirty' ? 'cleaned' : 'dirty';
+    try {
+      // Optimistic update
+      setLocalStatus(newStatus);
+      onUpdateStatus(_id, newStatus); // Notify parent immediately
+      await markAsCleaned(_id); // Call the hook's function
+      popover.onClose();
+    } catch (error) {
+      // Revert optimistic update on error
+      setLocalStatus(status);
+      onUpdateStatus(_id, status);
     }
-
-    setMarkingCleaned(false);
-    popover.onClose();
   };
 
   const tooltipTitle = (() => {
-    if (canMarkAsCleaned) return '';
-    if (status === 'cleaned') return 'Already cleaned';
-    return 'Cannot mark this task as cleaned';
+    if (canMarkAsCleaned) return localStatus === 'dirty' ? 'Mark as Cleaned' : 'Mark as Dirty';
+    if (localStatus === 'inspected') return 'Cannot toggle status for inspected tasks';
+    return 'Cannot mark this task';
   })();
 
   return (
@@ -82,9 +82,9 @@ export default function CleaningTaskTableRow({
             variant="body2"
             sx={{
               color:
-                (priority === 'High' && 'error.main') ||
-                (priority === 'Medium' && 'warning.main') ||
-                (priority === 'Low' && 'success.main') ||
+                (priority === 'high' && 'error.main') ||
+                (priority === 'medium' && 'warning.main') ||
+                (priority === 'low' && 'success.main') ||
                 'text.primary',
               fontWeight: 600,
             }}
@@ -97,13 +97,13 @@ export default function CleaningTaskTableRow({
           <Label
             variant="soft"
             color={
-              (status === 'cleaned' && 'success') ||
-              (status === 'dirty' && 'error') ||
-              (status === 'inspected' && 'info') ||
+              (localStatus === 'cleaned' && 'success') ||
+              (localStatus === 'dirty' && 'error') ||
+              (localStatus === 'inspected' && 'info') ||
               'default'
             }
           >
-            {status}
+            {localStatus}
           </Label>
         </TableCell>
 
@@ -120,35 +120,35 @@ export default function CleaningTaskTableRow({
         arrow="right-top"
         sx={{ width: 200 }}
       >
-        {/* Mark as Cleaned with highlight */}
         <Tooltip title={tooltipTitle}>
           <span>
             <MenuItem
-              disabled={markingCleaned || !canMarkAsCleaned || status === 'cleaned'}
+              disabled={markingCleaned || !canMarkAsCleaned}
               onClick={handleMarkAsCleaned}
               sx={{
-                bgcolor: 'success.main',
+                bgcolor: localStatus === 'dirty' ? 'success.main' : 'warning.main',
                 color: 'common.white',
                 borderRadius: 1,
                 my: 1,
                 fontWeight: 'bold',
                 '&:hover': {
-                  bgcolor: 'success.dark',
+                  bgcolor: localStatus === 'dirty' ? 'success.dark' : 'warning.dark',
                 },
-                opacity: !canMarkAsCleaned || status === 'cleaned' ? 0.5 : 1,
+                opacity: !canMarkAsCleaned ? 0.5 : 1,
               }}
             >
               {markingCleaned ? (
                 <Iconify icon="eos-icons:loading" width={20} />
               ) : (
-                <Iconify icon="ic:round-check-circle" />
+                <Iconify
+                  icon={localStatus === 'dirty' ? 'ic:round-check-circle' : 'ic:round-warning'}
+                />
               )}
-              Mark as Cleaned
+              {localStatus === 'dirty' ? 'Mark as Cleaned' : 'Mark as Dirty'}
             </MenuItem>
           </span>
         </Tooltip>
 
-        {/* Edit Option */}
         <MenuItem
           onClick={() => {
             onEditRow();
@@ -159,7 +159,6 @@ export default function CleaningTaskTableRow({
           Edit
         </MenuItem>
 
-        {/* Delete Option */}
         {/* <MenuItem
           onClick={() => {
             confirm.onTrue();
@@ -171,12 +170,11 @@ export default function CleaningTaskTableRow({
         </MenuItem> */}
       </CustomPopover>
 
-      {/* Confirm Delete Dialog */}
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
         title="Delete"
-        content="Are you sure want to delete?"
+        content="Are you sure you want to delete this task?"
         action={
           <Button
             variant="contained"
@@ -198,6 +196,7 @@ CleaningTaskTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onUpdateStatus: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

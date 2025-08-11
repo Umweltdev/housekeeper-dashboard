@@ -12,6 +12,8 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -39,12 +41,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { CLEANING_TASKS } from './cleaning-tasks';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetInventoryByHousekeeper } from 'src/api/inventory';
+
 import InvoiceTableToolbar from './invoice-table-toolbar';
 import CleaningTaskTableRow from './cleaning-task-edit-row';
 import InvoiceTableFiltersResult from './invoice-table-filters-result';
 
-// ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -67,31 +70,40 @@ const defaultFilters = {
 
 export default function InvoiceListViewEdit() {
   const { enqueueSnackbar } = useSnackbar();
-
+  const { user } = useAuthContext();
   const theme = useTheme();
-
   const settings = useSettingsContext();
-
-  const invoices = CLEANING_TASKS;
-
-  console.log(invoices);
-
   const router = useRouter();
-
-  const table = useTable({ defaultOrderBy: 'createDate' });
-
+  const table = useTable({ defaultOrderBy: 'requestDate' });
   const confirm = useBoolean();
-
   const [tableData, setTableData] = useState([]);
-
-  useEffect(() => {
-    const sortedInvoices = [...invoices].sort(
-      (a, b) => new Date(b.createDate) - new Date(a.createDate)
-    );
-    setTableData(sortedInvoices);
-  }, [invoices]);
-
   const [filters, setFilters] = useState(defaultFilters);
+
+  // Fetch inventory data for the housekeeper
+  const { inventories, inventoriesLoading, inventoriesError, inventoriesEmpty, refreshInventory } =
+    useGetInventoryByHousekeeper(user?._id);
+
+  console.log('INVENTORIES===>', inventories);
+
+  // Update tableData when inventories change
+  useEffect(() => {
+    if (inventories?.data && Array.isArray(inventories.data) && inventories.data.length > 0) {
+      const sortedInventories = [...inventories.data].sort(
+        (a, b) => new Date(b.requestDate) - new Date(a.requestDate)
+      );
+      setTableData(
+        sortedInventories.map((item) => ({
+          id: item._id,
+          itemName: item.name, // Map 'name' to 'itemName'
+          requestDate: item.requestDate,
+          quantity: item.quantity,
+          status: item.status,
+        }))
+      );
+    } else {
+      setTableData([]);
+    }
+  }, [inventories]);
 
   const dateError = isAfter(filters.startDate, filters.endDate);
 
@@ -115,7 +127,7 @@ export default function InvoiceListViewEdit() {
     filters.status !== 'all' ||
     (!!filters.startDate && !!filters.endDate);
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!dataFiltered.length && canReset) || inventoriesEmpty;
 
   const getInvoiceLength = (status) => tableData.filter((item) => item.status === status).length;
 
@@ -127,30 +139,15 @@ export default function InvoiceListViewEdit() {
 
   const TABS = [
     { value: 'all', label: 'All Items', color: 'default', count: tableData.length },
+    { value: 'approved', label: 'Approved', color: 'success', count: getInvoiceLength('approved') },
     {
-      value: 'Approved',
-      label: 'Approved',
-      color: 'success',
-      count: getInvoiceLength('Approved'),
-    },
-    {
-      value: 'Requested',
+      value: 'requested',
       label: 'Requested',
       color: 'warning',
-      count: getInvoiceLength('Requested'),
+      count: getInvoiceLength('requested'),
     },
-    {
-      value: 'Rejected',
-      label: 'Rejected',
-      color: 'error',
-      count: getInvoiceLength('Rejected'),
-    },
-    {
-      value: 'Received',
-      label: 'Received',
-      color: 'info',
-      count: getInvoiceLength('Received'),
-    },
+    { value: 'rejected', label: 'Rejected', color: 'error', count: getInvoiceLength('rejected') },
+    { value: 'received', label: 'Received', color: 'info', count: getInvoiceLength('received') },
   ];
 
   const handleFilters = useCallback(
@@ -170,6 +167,7 @@ export default function InvoiceListViewEdit() {
 
   const handleDeleteRow = useCallback(
     (id) => {
+      // Mock delete for now, to be implemented later
       setTableData((prev) => prev.filter((row) => row.id !== id));
       enqueueSnackbar('Deleted Successfully!');
       confirm.onFalse();
@@ -178,12 +176,10 @@ export default function InvoiceListViewEdit() {
   );
 
   const handleDeleteRows = useCallback(() => {
+    // Mock delete for now, to be implemented later
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-
     enqueueSnackbar('Delete success!');
-
     setTableData(deleteRows);
-
     table.onUpdatePageDeleteRows({
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
@@ -212,153 +208,167 @@ export default function InvoiceListViewEdit() {
   );
 
   return (
-    <>
-      <Card>
-        <Tabs
-          value={filters.status}
-          onChange={handleFilterStatus}
-          sx={{
-            px: 2.5,
-            boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-          }}
-        >
-          {TABS.map((tab) => (
-            <Tab
-              key={tab.value}
-              value={tab.value}
-              label={tab.label}
-              iconPosition="end"
-              icon={
-                <Label
-                  variant={
-                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                  }
-                  color={tab.color}
-                >
-                  {tab.count}
-                </Label>
-              }
-            />
-          ))}
-        </Tabs>
+    <Card>
+      {inventoriesLoading && (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 5 }}>
+          <CircularProgress />
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            Loading inventories...
+          </Typography>
+        </Stack>
+      )}
 
-        <InvoiceTableToolbar
-          filters={filters}
-          onFilters={handleFilters}
-          //
-          dateError={dateError}
-          serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option?.name)}
-        />
+      {inventoriesError && (
+        <Stack alignItems="center" justifyContent="center" sx={{ py: 5 }}>
+          <Typography variant="body2" color="error">
+            Failed to load inventories: {inventoriesError.message}
+          </Typography>
+          <Button variant="contained" color="primary" onClick={refreshInventory} sx={{ mt: 2 }}>
+            Retry
+          </Button>
+        </Stack>
+      )}
 
-        {canReset && (
-          <InvoiceTableFiltersResult
-            filters={filters}
-            onFilters={handleFilters}
-            //
-            onResetFilters={handleResetFilters}
-            //
-            results={dataFiltered.length}
-            sx={{ p: 2.5, pt: 0 }}
-          />
-        )}
-
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={dataFiltered.length}
-            onSelectAllRows={(checked) => {
-              table.onSelectAllRows(
-                checked,
-                dataFiltered.map((row) => row.id)
-              );
+      {!inventoriesLoading && !inventoriesError && (
+        <>
+          <Tabs
+            value={filters.status}
+            onChange={handleFilterStatus}
+            sx={{
+              px: 2.5,
+              boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
-            action={
-              <Stack direction="row">
-                <Tooltip title="Sent">
-                  <IconButton color="primary">
-                    <Iconify icon="iconamoon:send-fill" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Download">
-                  <IconButton color="primary">
-                    <Iconify icon="eva:download-outline" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Print">
-                  <IconButton color="primary">
-                    <Iconify icon="solar:printer-minimalistic-bold" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-            }
-          />
-
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={dataFiltered.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    dataFiltered.map((row) => row.id)
-                  )
+          >
+            {TABS.map((tab) => (
+              <Tab
+                key={tab.value}
+                value={tab.value}
+                label={tab.label}
+                iconPosition="end"
+                icon={
+                  <Label
+                    variant={
+                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                    }
+                    color={tab.color}
+                  >
+                    {tab.count}
+                  </Label>
                 }
               />
+            ))}
+          </Tabs>
 
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <CleaningTaskTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                      onViewRow={() => handleViewRow(row.id)}
-                      onEditRow={() => handleEditRow(row.id)}
-                      onDeleteRow={() => handleDeleteRow(row.id)}
-                    />
-                  ))}
+          <InvoiceTableToolbar
+            filters={filters}
+            onFilters={handleFilters}
+            dateError={dateError}
+            serviceOptions={[]} // Disable service filter
+          />
 
-                <TableEmptyRows
-                  height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
+          {canReset && (
+            <InvoiceTableFiltersResult
+              filters={filters}
+              onFilters={handleFilters}
+              onResetFilters={handleResetFilters}
+              results={dataFiltered.length}
+              sx={{ p: 2.5, pt: 0 }}
+            />
+          )}
+
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={dataFiltered.length}
+              onSelectAllRows={(checked) => {
+                table.onSelectAllRows(
+                  checked,
+                  dataFiltered.map((row) => row.id)
+                );
+              }}
+              action={
+                <Stack direction="row">
+                  <Tooltip title="Sent">
+                    <IconButton color="primary">
+                      <Iconify icon="iconamoon:send-fill" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Download">
+                    <IconButton color="primary">
+                      <Iconify icon="eva:download-outline" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Print">
+                    <IconButton color="primary">
+                      <Iconify icon="solar:printer-minimalistic-bold" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton color="primary" onClick={confirm.onTrue}>
+                      <Iconify icon="solar:trash-bin-trash-bold" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              }
+            />
+
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={dataFiltered.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                  onSelectAllRows={(checked) =>
+                    table.onSelectAllRows(
+                      checked,
+                      dataFiltered.map((row) => row.id)
+                    )
+                  }
                 />
 
-                <TableNoData notFound={notFound} />
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+                <TableBody>
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row) => (
+                      <CleaningTaskTableRow
+                        key={row.id}
+                        row={row}
+                        selected={table.selected.includes(row.id)}
+                        onSelectRow={() => table.onSelectRow(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
+                      />
+                    ))}
 
-        <TablePaginationCustom
-          count={dataFiltered.length}
-          page={table.page}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-          //
-          dense={table.dense}
-          onChangeDense={table.onChangeDense}
-        />
-      </Card>
+                  <TableEmptyRows
+                    height={denseHeight}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered.length)}
+                  />
+
+                  {/* <TableNoData notFound={notFound} /> */}
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+
+          <TablePaginationCustom
+            count={dataFiltered.length}
+            page={table.page}
+            rowsPerPage={table.rowsPerPage}
+            onPageChange={table.onChangePage}
+            onRowsPerPageChange={table.onChangeRowsPerPage}
+            dense={table.dense}
+            onChangeDense={table.onChangeDense}
+          />
+        </>
+      )}
 
       <ConfirmDialog
         open={confirm.value}
@@ -382,14 +392,14 @@ export default function InvoiceListViewEdit() {
           </Button>
         }
       />
-    </>
+    </Card>
   );
 }
 
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -399,29 +409,23 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  let filteredData = stabilizedThis.map((el) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
-      (invoice) => invoice?.itemName.toLowerCase().indexOf(name.toLowerCase()) !== -1
+    filteredData = filteredData.filter(
+      (invoice) => invoice.itemName.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((invoice) => invoice.status === status);
+    filteredData = filteredData.filter((invoice) => invoice.status === status);
   }
 
-  if (service.length) {
-    inputData = inputData.filter((invoice) =>
-      invoice.items.some((filterItem) => service.includes(filterItem.service))
+  if (!dateError && startDate && endDate) {
+    filteredData = filteredData.filter((invoice) =>
+      isBetween(invoice.requestDate, startDate, endDate)
     );
   }
 
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter((invoice) => isBetween(invoice.createDate, startDate, endDate));
-    }
-  }
-
-  return inputData;
+  return filteredData;
 }
