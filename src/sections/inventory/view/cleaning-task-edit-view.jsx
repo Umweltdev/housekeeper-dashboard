@@ -364,21 +364,25 @@ CleaningTaskEditForm.propTypes = {
   task: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     roomId: PropTypes.shape({
-      roomNumber: PropTypes.number.isRequired,
-    }).isRequired,
+      roomNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      roomType: PropTypes.shape({
+        title: PropTypes.string,
+      }),
+    }),
+    room: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     category: PropTypes.string,
     description: PropTypes.string,
-    dueDate: PropTypes.string.isRequired,
-    priority: PropTypes.string.isRequired,
+    dueDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired,
+    priority: PropTypes.oneOf(['Low', 'Medium', 'High']).isRequired,
     status: PropTypes.shape({
-      statusType: PropTypes.string.isRequired,
+      statusType: PropTypes.oneOf(['dirty', 'cleaned', 'inspected']).isRequired,
       description: PropTypes.string,
-      detailedIssues: PropTypes.array,
       maintenanceAndDamages: PropTypes.arrayOf(
         PropTypes.shape({
-          issue: PropTypes.string,
-          issuePriority: PropTypes.string,
-          reportedAt: PropTypes.string,
+          id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          description: PropTypes.string,
+          date: PropTypes.string,
+          priority: PropTypes.oneOf(['Low', 'Medium', 'High']),
         })
       ),
     }).isRequired,
