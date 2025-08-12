@@ -1,7 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
@@ -13,32 +12,28 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import axiosInstance from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
 import { useTable, getComparator } from 'src/components/table';
 
 import InvoiceListViewEdit from 'src/sections/task/view/invoice-list-viewEdit';
-
-import { useGetBookings } from 'src/api/booking';
-
 import AppWidgetSummary from 'src/sections/overview/app/app-widget-summary';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'customerName', label: 'Customer Name' },
-  { id: 'status', label: 'Price (₦)', width: 170 },
-  { id: 'orderNumber', label: 'Booking ID', width: 200 },
-  { id: 'roomType', label: 'Room Type', width: 200 },
-  { id: 'roomNumber', label: 'Room Number', width: 150 },
-  { id: '', width: 100 },
+  { id: 'room', label: 'Room' },
+  { id: 'category', label: 'Room Type' },
+  { id: 'description', label: 'Task Description' },
+  { id: 'dueDate', label: 'Due Date' },
+  { id: 'priority', label: 'Priority' },
+  { id: 'status', label: 'Cleaning Status' },
+  { id: '', label: '' },
 ];
 
 const defaultFilters = {
@@ -47,7 +42,7 @@ const defaultFilters = {
   status: 'all',
 };
 
-// MonthSelector component moved outside
+// MonthSelector component
 const MonthSelector = ({ value, onChange }) => (
   <FormControl fullWidth size="small" sx={{ minWidth: 120 }}>
     <InputLabel>Month</InputLabel>
@@ -80,21 +75,72 @@ export default function UserListView() {
   const { enqueueSnackbar } = useSnackbar();
   const table = useTable();
   const settings = useSettingsContext();
-  const router = useRouter();
   const confirm = useBoolean();
-  const { bookings, refreshBookings } = useGetBookings();
   const [tableData, setTableData] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState('all');
-  const [selectedTimeframe, setSelectedTimeframe] = useState('month');
+  const [tasks, setTasks] = useState([]);
+  const [tasksLoading, setTasksLoading] = useState(false);
+  const [tasksError, setTasksError] = useState(null);
   const theme = useTheme();
   const [filters, setFilters] = useState(defaultFilters);
+  const [selectedMonth, setSelectedMonth] = useState('all');
 
+  const { user, authenticated } = useAuthContext();
+  const housekeeperId = user?._id || user?.id;
+
+  // Debug logs for user and housekeeperId
+  console.log('User from context:', user);
+  console.log('HOUSEKEEPER ID:', housekeeperId);
+
+  // Fetch tasks directly with axiosInstance
   useEffect(() => {
-    setTableData(bookings);
-  }, [bookings]);
+    if (!housekeeperId || !authenticated) {
+      console.log('Skipping task fetch: No housekeeperId or not authenticated');
+      return;
+    }
 
+    const fetchTasks = async () => {
+      setTasksLoading(true);
+      setTasksError(null);
+      try {
+        console.log('Fetching tasks for housekeeperId:', housekeeperId);
+        const response = await axiosInstance.get(`/api/task/housekeeper/${housekeeperId}`);
+        console.log('Tasks response:', response.data);
+        setTasks(response.data.data || []);
+        setTableData(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+        setTasksError(error.message || 'Failed to fetch tasks');
+        setTasks([]);
+        setTableData([]);
+      } finally {
+        setTasksLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, [housekeeperId, authenticated]);
+
+  // Calculate status counts using useMemo
+  const statusCounts = useMemo(() => {
+    if (!tasks || !Array.isArray(tasks)) return { cleaned: 0, dirty: 0, inspected: 0 };
+
+    return tasks.reduce(
+      (acc, task) => {
+        const status = task.status.statusType;
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+      },
+      { cleaned: 0, dirty: 0, inspected: 0 }
+    );
+  }, [tasks]);
+
+  // Debug log for tasks and status counts
+  console.log('TASKS::::ANALYTICS==>', tasks);
+  console.log('STATUS COUNTS:', statusCounts);
+
+  // Filter table data
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: tasks,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -105,105 +151,49 @@ export default function UserListView() {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
+    const deleteRows = tableData.filter((row) => !table.selected.includes(row._id));
     enqueueSnackbar('Delete success!');
     setTableData(deleteRows);
+    setTasks(deleteRows);
     table.onUpdatePageDeleteRows({
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
   }, [dataFiltered.length, dataInPage.length, enqueueSnackbar, table, tableData]);
 
-  const calculateDaysDifference = (date1, date2) => {
-    const timeDifference = new Date(date1) - new Date(date2);
-    return Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-  };
+  // if (!authenticated || !user) {
+  //   return (
+  //     <Container>
+  //       <Box>Please log in to view tasks</Box>
+  //     </Container>
+  //   );
+  // }
 
-  const getWeekNumber = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-    const yearStart = new Date(d.getFullYear(), 0, 1);
-    return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-  };
-
-  // Initialize data structures
-  const monthlyGuests = {};
-  const weeklyGuests = {};
-  const dailyGuests = {};
-  const leadTimeData = [];
-  const lengthOfStayData = [];
-
-  // Process bookings data
-  bookings.forEach((booking) => {
-    booking.rooms.forEach((room) => {
-      const lengthOfStay = calculateDaysDifference(room.checkOut, room.checkIn);
-      lengthOfStayData.push(lengthOfStay);
-
-      const leadTime = calculateDaysDifference(room.checkIn, booking.createdAt);
-      leadTimeData.push(leadTime);
-
-      const checkInDate = new Date(room.checkIn);
-      const monthKey = `${checkInDate.getFullYear()}-${checkInDate.getMonth() + 1}`;
-      const weekKey = `${checkInDate.getFullYear()}-W${getWeekNumber(checkInDate)}`;
-      const dayKey = `${checkInDate.getFullYear()}-${
-        checkInDate.getMonth() + 1
-      }-${checkInDate.getDate()}`;
-
-      monthlyGuests[monthKey] = (monthlyGuests[monthKey] || 0) + 1;
-      weeklyGuests[weekKey] = (weeklyGuests[weekKey] || 0) + 1;
-      dailyGuests[dayKey] = (dailyGuests[dayKey] || 0) + 1;
-    });
-  });
-
-  // Extract check-in dates
-  const checkInDates = bookings
-    .filter((booking) => booking.status === 'checkedIn')
-    .flatMap((booking) => booking.rooms.map((room) => new Date(room.checkIn || booking.createdAt)));
-
-  // Calculate monthly averages
-  const calculateMonthlyAverage = () => {
-    if (checkInDates.length === 0) return 0;
-
-    const filteredDates =
-      selectedMonth === 'all'
-        ? checkInDates
-        : checkInDates.filter((date) => date.getMonth() + 1 === Number(selectedMonth));
-
-    if (filteredDates.length === 0) return 0;
-
-    const minDate = new Date(Math.min(...filteredDates));
-    const maxDate = new Date(Math.max(...filteredDates));
-    const totalDays = (maxDate - minDate) / (1000 * 60 * 60 * 24) || 1;
-
-    return (filteredDates.length / totalDays).toFixed(2);
-  };
-
-  const averageCheckInsPerDay = calculateMonthlyAverage();
-  const averageCheckInsPerHour =
-    checkInDates.length > 0 ? (averageCheckInsPerDay / 24).toFixed(2) : 0;
-
-  const guestChartData = {
-    month: Object.values(monthlyGuests),
-    week: Object.values(weeklyGuests),
-    day: Object.values(dailyGuests),
-  };
+  if (tasksLoading) {
+    return (
+      <Container>
+        <Box>Loading tasks...</Box>
+      </Container>
+    );
+  }
+  if (tasksError) {
+    return (
+      <Container>
+        <Box>Error loading tasks: {tasksError}</Box>
+      </Container>
+    );
+  }
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="My Task"
-          links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            // { name: 'Check-In', href: paths.dashboard.booking.root },
-            { name: 'Task' },
-          ]}
+          links={[{ name: 'Dashboard', href: paths.dashboard.root }, { name: 'Task' }]}
           sx={{
             mb: { xs: 3, md: 5 },
           }}
         />
-        {/* <Divider /> */}
 
         <Box
           sx={{
@@ -222,42 +212,41 @@ export default function UserListView() {
               title: 'Total Task',
               icon: 'bi:list-task',
               iconColor: 'info.main',
-              total: 23,
+              total: tasks.length || 0,
               chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [3, 5, 2, 4, 6, 2, 1, 1, 0],
               },
             },
             {
-              title: 'High Priority',
-              icon: 'iconoir:priority-high-solid',
-              iconColor: 'error.main',
-              total: 12,
-              chart: {
-                colors: [theme.palette.success.light, theme.palette.success.main],
-                series: [3, 5, 2, 4, 6, 2, 1],
-              },
-            },
-            {
-              title: 'In Progress',
-              icon: 'grommet-icons:in-progress',
-              iconColor: 'warning.main',
-              total: 18,
-              percent: +8,
-              chart: {
-                colors: [theme.palette.warning.light, theme.palette.warning.main],
-                series: [4, 2, 6, 8, 5],
-              },
-            },
-            {
-              title: 'Completed Tasks',
+              title: 'Cleaned Tasks',
               icon: 'solar:check-circle-bold-duotone',
               iconColor: 'success.main',
-              total: 4,
-              percent: +12,
+              total: statusCounts.cleaned !== undefined ? statusCounts.cleaned : 0,
               chart: {
                 colors: [theme.palette.success.light, theme.palette.success.main],
                 series: [1, 2, 3, 4, 5],
+              },
+            },
+
+            {
+              title: 'Dirty Tasks',
+              icon: 'iconoir:priority-high-solid',
+              color: 'error.main',
+              total: statusCounts.dirty !== undefined ? statusCounts.dirty : 0,
+              chart: {
+                colors: [theme.palette.error.light, theme.palette.error.main],
+                series: [3, 5, 2, 4, 6],
+              },
+            },
+            {
+              title: 'Inspected Tasks',
+              icon: 'grommet-icons:in-progress',
+              color: 'info.main',
+              total: statusCounts.inspected !== undefined ? statusCounts.inspected : 0,
+              chart: {
+                colors: [theme.palette.info.light, theme.palette.info.main],
+                series: [4, 2, 6, 8, 5],
               },
             },
           ].map((item, index) => (
@@ -315,21 +304,18 @@ function applyFilter({ inputData, comparator, filters }) {
 
   filteredData = filteredData.map((el) => el[0]);
 
-  filteredData = filteredData.filter((booking) => booking.status === 'paid');
-
   if (name) {
-    filteredData = filteredData.filter((booking) =>
-      booking.customer.name.toLowerCase().includes(name.toLowerCase())
+    filteredData = filteredData.filter((task) =>
+      task.roomId?.roomNumber?.toString().toLowerCase().includes(name.toLowerCase())
     );
   }
 
   if (status !== 'all') {
-    filteredData = filteredData.filter((booking) => booking.status === status);
+    filteredData = filteredData.filter((task) => task.status.statusType === status);
   }
 
   return filteredData;
 }
 
 UserListView.propTypes = {
-  // Add any props your component receives here
 };

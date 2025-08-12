@@ -27,6 +27,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { paths } from 'src/routes/paths';
 import { endpoints } from 'src/utils/axios';
+import { useGetRoomType } from 'src/api/roomType';
 
 const STATUS_OPTIONS = ['dirty', 'cleaned'];
 const STATUS_COLORS = {
@@ -43,6 +44,9 @@ const PRIORITY_COLORS = {
 
 export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
   const navigate = useNavigate();
+  const { roomType } = useGetRoomType();
+  // console.log('ROOMTYPE', roomType);
+
   const [issues, setIssues] = useState(
     task.status.maintenanceAndDamages.map((item) => ({
       id: item._id || Date.now().toString(),
@@ -91,7 +95,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
         status,
         issues,
       });
-      // Trigger a global refresh of the task list
       await mutate(endpoints.task.list, undefined, { revalidate: true });
       await mutate(`${endpoints.task.list}/housekeeper/${task.housekeeperId}`, undefined, {
         revalidate: true,
@@ -109,14 +112,12 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
   return (
     <Box>
       <Grid container spacing={3}>
-        {/* Room Info (Left) */}
         <Grid item xs={12} md={6} sx={{ maxHeight: 1000, overflowY: 'auto' }}>
           <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
             <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
               <Typography variant="h6" component="h2">
                 Room #{task.roomId?.roomNumber || 'N/A'}
               </Typography>
-
               <Label
                 variant="soft"
                 color={STATUS_COLORS[status] || 'default'}
@@ -124,7 +125,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
               >
                 {status}
               </Label>
-
               <Label
                 variant="soft"
                 color={PRIORITY_COLORS[task.priority] || 'default'}
@@ -133,13 +133,14 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
                 {task.priority} Priority
               </Label>
             </Stack>
-
             <Divider sx={{ mb: 2 }} />
-
             <Stack spacing={2}>
               <TextField
-                label="Room Category"
-                value={task.roomId?.roomType?.title || 'Unknown'}
+                label="Room Title"
+                value={
+                  roomType?.find((type) => type._id === task.roomId?.roomType?._id)?.title ||
+                  'Unknown'
+                }
                 fullWidth
                 InputProps={{ readOnly: true }}
               />
@@ -158,7 +159,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
                 fullWidth
                 InputProps={{ readOnly: true }}
               />
-
               <Stack direction="row" alignItems="center" spacing={1}>
                 <TextField
                   label="Priority"
@@ -173,7 +173,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
                   variant="soft"
                 />
               </Stack>
-
               {isStatusEditable ? (
                 <TextField
                   label="Cleaning Status"
@@ -202,8 +201,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
             </Stack>
           </Paper>
         </Grid>
-
-        {/* Issues Section (Right) */}
         <Grid item xs={12} md={6} sx={{ maxHeight: 550 }}>
           <Card
             elevation={3}
@@ -225,11 +222,9 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
                   Room Issues & Repairs
                 </Typography>
               </Stack>
-
               <Typography variant="body2" color="text.secondary" mb={3}>
                 Report and track maintenance issues, damages, or required repairs for this room.
               </Typography>
-
               <Stack direction="row" spacing={1} alignItems="flex-start" mb={2}>
                 <TextField
                   fullWidth
@@ -254,7 +249,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
                   ))}
                 </TextField>
               </Stack>
-
               <Stack direction="row" justifyContent="flex-end">
                 <Button
                   onClick={handleAddIssue}
@@ -265,9 +259,7 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
                   Add Issue
                 </Button>
               </Stack>
-
               <Divider sx={{ my: 2 }} />
-
               <Box sx={{ flex: 1, overflowY: 'auto' }}>
                 <Stack spacing={2}>
                   {issues.length > 0 ? (
@@ -333,8 +325,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
           </Card>
         </Grid>
       </Grid>
-
-      {/* Footer */}
       <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
         <Button
           variant="outlined"
@@ -362,8 +352,6 @@ export default function CleaningTaskEditForm({ task, onSave, isSaving }) {
           {isSaving ? 'Saving...' : 'Save Changes'}
         </Button>
       </Box>
-
-      {/* Snackbar */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={1500}

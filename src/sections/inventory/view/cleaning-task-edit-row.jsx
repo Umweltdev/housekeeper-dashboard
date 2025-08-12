@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
+
 import Button from '@mui/material/Button';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDeleteInventory, useGetInventoryByHousekeeper } from 'src/api/inventory';
@@ -21,21 +20,24 @@ import { useState } from 'react';
 // ----------------------------------------------------------------------
 
 export default function CleaningTaskTableRow({ row, selected, onSelectRow, housekeeperId }) {
-  const { id, itemName, requestDate, quantity, status, roomId, room, category } = row;
+  const { id, itemName, requestDate, quantity, status } = row;
 
   const confirm = useBoolean();
   const [loading, setLoading] = useState(false);
   const { deleteInventory } = useDeleteInventory();
   const { refreshInventory } = useGetInventoryByHousekeeper(housekeeperId);
 
+  console.log('ROW_ID:', id);
+
   const handleDelete = async () => {
     setLoading(true);
     try {
       await deleteInventory(id, housekeeperId);
-      await refreshInventory();
+      await refreshInventory(); // Explicitly trigger refetch
       confirm.onFalse();
       setLoading(false);
     } catch (error) {
+      // Error notification handled in useDeleteInventory
       setLoading(false);
     }
   };
@@ -47,38 +49,25 @@ export default function CleaningTaskTableRow({ row, selected, onSelectRow, house
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell>
-          <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
-            <Typography variant="h6" component="h2">
-              Room #{roomId?.roomNumber || room || 'N/A'}
-            </Typography>
-            <Label
-              variant="soft"
-              color={
-                (status === 'approved' && 'success') ||
-                (status === 'requested' && 'warning') ||
-                (status === 'rejected' && 'error') ||
-                (status === 'received' && 'info') ||
-                'default'
-              }
-            >
-              {status}
-            </Label>
-          </Stack>
-
-          <TextField
-            label="Room Category"
-            value={roomId?.roomType?.title || category || 'Unknown'}
-            fullWidth
-            InputProps={{ readOnly: true }}
-          />
-        </TableCell>
-
         <TableCell>{itemName}</TableCell>
         <TableCell>
           <Typography variant="body2">{fDate(requestDate)}</Typography>
         </TableCell>
         <TableCell>{quantity}</TableCell>
+        <TableCell>
+          <Label
+            variant="soft"
+            color={
+              (status === 'approved' && 'success') ||
+              (status === 'requested' && 'warning') ||
+              (status === 'rejected' && 'error') ||
+              (status === 'received' && 'info') ||
+              'default'
+            }
+          >
+            {status}
+          </Label>
+        </TableCell>
 
         <TableCell align="left" sx={{ px: 1 }}>
           {status === 'requested' && (
@@ -108,19 +97,14 @@ CleaningTaskTableRow.propTypes = {
   onSelectRow: PropTypes.func,
   housekeeperId: PropTypes.string.isRequired,
   row: PropTypes.shape({
+    roomNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    roomType: PropTypes.string,
     id: PropTypes.string.isRequired,
     itemName: PropTypes.string.isRequired,
     requestDate: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
     status: PropTypes.oneOf(['approved', 'requested', 'rejected', 'received']).isRequired,
-    room: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    category: PropTypes.string,
-    roomId: PropTypes.shape({
-      roomNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      roomType: PropTypes.shape({
-        title: PropTypes.string,
-      }),
-    }),
+    housekeeperId: PropTypes.string.isRequired,
   }).isRequired,
   selected: PropTypes.bool,
 };

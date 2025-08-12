@@ -78,12 +78,14 @@ export default function InvoiceListViewEdit() {
   const { enqueueSnackbar } = useSnackbar();
   const { user, authenticated } = useAuthContext();
 
-  console.log('User from context:', user);
+  // console.log('User from context:', user);
 
   const housekeeperId = user?.id || user?._id;
-  console.log('HOUSEKEEPER ID:', housekeeperId);
+  // console.log('HOUSEKEEPER ID:', housekeeperId);
 
   const { tasks, tasksLoading, tasksError, refreshTasks } = useGetTasksByHousekeeper(housekeeperId);
+
+  console.log('TASKS:::>tasks', tasks);
 
   const theme = useTheme();
   const settings = useSettingsContext();

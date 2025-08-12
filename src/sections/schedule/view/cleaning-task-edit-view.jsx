@@ -24,6 +24,7 @@ import {
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { useGetRoomType } from 'src/api/roomType';
 
 const STATUS_OPTIONS = ['dirty', 'cleaned'];
 const STATUS_COLORS = {
@@ -47,6 +48,9 @@ export default function CleaningTaskEditForm({ task }) {
   const [status, setStatus] = useState(task.status);
   const [isSaving, setIsSaving] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const { roomType } = useGetRoomType();
+  console.log('ROOM TYPES:::>', roomType);
 
   const isStatusEditable = status === 'dirty' || status === 'cleaned';
 
@@ -99,7 +103,7 @@ export default function CleaningTaskEditForm({ task }) {
           <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
             <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
               <Typography variant="h6" component="h2">
-                Room #{task.room}
+                Room {task.room}
               </Typography>
 
               <Label
